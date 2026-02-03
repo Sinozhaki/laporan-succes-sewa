@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SUCCESS RENTAL ZEN X 8800</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #E0E7FF;
+            --primary: #FFEB3B;
+            --secondary: #FF6B6B;
+            --accent: #4D96FF;
+            --border: 3px solid #000000;
+            --shadow-hard: 5px 5px 0px #000000;
+            --shadow-small: 3px 3px 0px #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#000000 1px, transparent 1px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 15px;
+            color: #000;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary);
+            border: var(--border);
+            box-shadow: var(--shadow-hard);
+            padding: 20px 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            transform: rotate(-1deg);
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        h1 {
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 1.8rem;
+            line-height: 1.1;
+            text-shadow: 2px 2px 0px #fff;
+            word-wrap: break-word;
+        }
+
+        p.subtitle {
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            background: #000;
+            color: #fff;
+            display: inline-block;
+            padding: 4px 8px;
+            transform: rotate(2deg);
+        }
+
+        /* CARD STYLE */
+        .card {
+            background-color: #fff;
+            border: var(--border);
+            box-shadow: var(--shadow-hard);
+            padding: 20px 15px;
+            margin-bottom: 30px;
+            position: relative;
+            border-radius: 4px;
+        }
+
+        /* EXAMPLE SECTION */
+        .example-badge {
+            background: #000;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            display: inline-block;
+            transform: rotate(-2deg);
+            margin-bottom: 10px;
+            box-shadow: 3px 3px 0 var(--secondary);
+            border: 2px solid #fff;
+        }
+
+        .example-img {
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* ADMIN BUTTON (Floating) */
+        .admin-float-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 2px solid #000;
+            box-shadow: 3px 3px 0px #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        .admin-float-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #000;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: inline-block;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            background: var(--accent);
+            border: 2px solid #000;
+            padding: 3px 8px;
+            margin-bottom: -12px;
+            margin-left: 5px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 2px 2px 0px #000;
+            transform: rotate(-1deg);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 10px;
+            border: var(--border);
+            background: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            outline: none;
+            box-shadow: var(--shadow-small);
+            border-radius: 0;
+            -webkit-appearance: none;
+        }
+
+        input:focus, select:focus {
+            background-color: var(--secondary);
+            color: #fff;
+            box-shadow: 1px 1px 0px #000;
+            transform: translate(2px, 2px);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 0.8rem;
+            background: #f0f0f0;
+        }
+
+        /* PREVIEW */
+        #previewContainer {
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+            border: 2px dashed #000;
+            padding: 8px;
+            background: #fdfdfd;
+        }
+        
+        #imgPreview {
+            max-width: 100%;
+            max-height: 200px;
+            border: 2px solid #000;
+            box-shadow: 3px 3px 0px #000;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* BUTTONS */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #000;
+            color: #fff;
+            border: var(--border);
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-hard);
+            margin-top: 5px;
+            position: relative;
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        /* ANIMASI LOADING */
+        .loader-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .loading-text {
+            font-weight: 900;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            animation: blink 0.5s infinite;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 25px;
+            border: 3px solid #000;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--primary),
+                var(--primary) 15px,
+                #000 15px,
+                #000 30px
+            );
+            background-size: 200% 200%;
+            animation: barberpole 1s linear infinite;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        @keyframes barberpole { 0% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* ADMIN PANEL (Responsive) */
+        #adminPanel {
+            display: none;
+            border: var(--border);
+            background: #fff;
+            padding: 15px;
+            box-shadow: var(--shadow-hard);
+            overflow-x: auto;
+        }
+
+        .report-item {
+            font-size: 0.9rem;
+        }
+        
+        .report-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        @media screen and (max-width: 380px) {
+            h1 { font-size: 1.5rem; }
+            .card { padding: 15px 10px; }
+            .btn { font-size: 1rem; padding: 12px; }
+            .example-badge { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="admin-float-btn" onclick="toggleAdmin()" title="Mode Admin">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.7 7l3.3 3.3L7 20.3c-.6.6-1.5.6-2.1 0l-1.2-1.2c-.6-.6-.6-1.5 0-2.1L13.7 7zm5.5-2.7l-1.5 1.5-3.3-3.3 1.5-1.5c1-1 2.6-1 3.6 0l-1.4 1.4.6.6 1.4-1.4c1 1 1 2.6 0 3.6-.8.8-1.5.1-.9-.9zM3 21l3-3-2-1-1 2 1 1z"/>
+        </svg>
+    </button>
+
+    <div class="container">
+        <header>
+            <h1>SUCCESS RENTAL<br>ZEN X 8800</h1>
+            <p class="subtitle">Wajib laporan dengan baik & benar</p>
+        </header>
+
+        <div class="card" style="text-align: center;">
+            <div class="example-badge">💡 CONTOH VALID</div>
+            <p style="font-weight: 700; font-size: 0.9rem; margin-top: 0; margin-bottom: 10px;">
+                SS FULL CHAT & JELAS:
+            </p>
+            <img src="contoh.png" alt="Contoh" class="example-img" onerror="this.style.display='none'; this.parentElement.innerHTML+='<p style=\'color:red; font-size:0.8rem; font-weight:bold;\'>[Gambar contoh.png tidak ditemukan]</p>'">
+        </div>
+
+        <div id="userPanel">
+            <div class="card">
+                <div class="form-group">
+                    <label>Email Akun</label>
+                    <input type="email" id="email" placeholder="zipinmovic@yahoo.co.id" required>
+                </div>
+
+                <div class="form-group">
+                    <label>No. WhatsApp</label>
+                    <input type="tel" id="telepon" placeholder="08xxxxx" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Status Akun</label>
+                    <select id="status">
+                        <option value="New Acc">New Acc (Wajib jika baru)</option>
+                        <option value="Unrestric">Unrestric</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal (Auto)</label>
+                    <input type="text" id="tanggal" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Bukti (SS)</label>
+                    <input type="file" id="buktiImg" accept="image/*">
+                    <div id="previewContainer">
+                        <p style="font-size:0.7rem; font-weight:bold; margin-bottom:5px;">PREVIEW:</p>
+                        <img id="imgPreview" src="" alt="Preview">
+                    </div>
+                </div>
+
+                <button class="btn" onclick="submitReport()" id="btnSubmit">Kirim Laporan</button>
+                
+                <div class="loader-container" id="loader">
+                    <span class="loading-text">MENGIRIM DATA...</span>
+                    <div class="loading-bar"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="adminPanel">
+            <h2 style="margin-top:0; font-size:1.2rem; border-bottom: 3px solid #000; padding-bottom:10px;">🛡️ Admin Panel</h2>
+            <button class="btn" style="margin-bottom: 15px; background: #fff; color:#000; font-size: 0.9rem; padding: 10px;" onclick="loadPendingReports()">Refresh Data</button>
+            <div id="adminContent">
+                <p style="font-size:0.9rem">Klik refresh untuk data baru...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dsuk4te3f/image/upload";
+        const CLOUDINARY_PRESET = "xv0tqoe8";
+        const BIN_PENDING_ID = "6981f1e5d0ea881f409d919f";
+        const API_KEY_PENDING = "$2a$10$mx8berYVnQxRc7ATeB018Orxl1veAxJt/HhcqGd2CS6kSzL4yPg82";
+        const BIN_ACC_ID = "6905803fae596e708f3baa25";
+        const API_KEY_ACC = "$2a$10$4v5UzmjJBEf7T6RUlR7CfeJERCrf/waXNcO7pxUk3OYGOzBNLJ7Fy";
+
+        // Auto Date
+        document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+
+        // --- IMAGE PREVIEW LOGIC ---
+        document.getElementById('buktiImg').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('previewContainer');
+            const imgPreview = document.getElementById('imgPreview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imgPreview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                imgPreview.src = '';
+                previewContainer.style.display = 'none';
+            }
+        });
+
+        // --- USER FUNCTIONS ---
+        async function submitReport() {
+            const email = document.getElementById('email').value;
+            const telepon = document.getElementById('telepon').value;
+            const status = document.getElementById('status').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const fileInput = document.getElementById('buktiImg');
+
+            if (!email || !telepon || fileInput.files.length === 0) {
+                alert("Wajib isi semua kolom & upload gambar!");
+                return;
+            }
+
+            const btn = document.getElementById('btnSubmit');
+            const loader = document.getElementById('loader');
+            
+            btn.disabled = true;
+            btn.innerText = "WAIT..."; 
+            loader.style.display = 'block'; 
+
+            try {
+                // 1. Upload Image
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                formData.append('upload_preset', CLOUDINARY_PRESET);
+
+                const imgRes = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                const imgData = await imgRes.json();
+                const imgUrl = imgData.secure_url;
+
+                // 2. Prepare Data
+                const reportId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const newReport = {
+                    id: reportId, email: email, telepon: telepon, status: status, tanggal: tanggal, bukti_url: imgUrl 
+                };
+
+                // 3. Get Data
+                const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY_PENDING }
+                });
+                const getData = await getRes.json();
+                let currentUsers = getData.record.users || [];
+
+                // 4. Update Data
+                currentUsers.push(newReport);
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING },
+                    body: JSON.stringify({ users: currentUsers })
+                });
+
+                alert("Laporan Terkirim!");
+                location.reload(); 
+
+            } catch (error) {
+                console.error(error);
+                alert("Error: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "KIRIM LAPORAN";
+                loader.style.display = 'none';
+            }
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            const userPanel = document.getElementById('userPanel');
+            
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                userPanel.style.display = 'block';
+                return;
+            }
+
+            const pass = prompt("Masukkan Password Admin:");
+            // Password Admin: 2003
+            if (pass === '2003') {
+                panel.style.display = 'block';
+                userPanel.style.display = 'none';
+                loadPendingReports();
+            } else {
+                alert("Password salah");
+            }
+        }
+
+        async function loadPendingReports() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = "Loading...";
+
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY_PENDING }
+                });
+                const data = await res.json();
+                const users = data.record.users || [];
+
+                if (users.length === 0) {
+                    content.innerHTML = "<p>Tidak ada laporan.</p>";
+                    return;
+                }
+
+                let html = '';
+                users.forEach((u, index) => {
+                    html += `
+                        <div class="report-item" style="background:#f9f9f9; border:2px solid #000; padding:10px; margin-bottom:15px;">
+                            <div><strong>Email:</strong> <br>${u.email}</div>
+                            <div style="margin-top:5px;"><strong>Status:</strong> ${u.status}</div>
+                            <div style="margin-top:5px;"><a href="${u.bukti_url}" target="_blank" style="color:blue; font-weight:bold;">Lihat Bukti</a></div>
+                            <img src="${u.bukti_url}" style="width:100%; height:auto; margin-top:5px; border:1px solid #000;">
+                            
+                            <div class="report-actions" style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="btn-acc" onclick="processAcc(${index})" style="padding:10px; background:#4CAF50; color:white; border:2px solid black; font-weight:bold; width:100%;">TERIMA</button>
+                                <button class="btn-tolak" onclick="processTolak(${index})" style="padding:10px; background:#F44336; color:white; border:2px solid black; font-weight:bold; width:100%;">TOLAK & CHAT</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                content.innerHTML = html;
+                window.pendingUsers = users; 
+            } catch (e) {
+                content.innerHTML = "Gagal memuat.";
+            }
+        }
+
+        async function processAcc(index) {
+            const userToAcc = window.pendingUsers[index];
+            if (!confirm(`ACC ${userToAcc.email}?`)) return;
+
+            try {
+                const getRes2 = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ACC_ID}/latest`, { headers: { 'X-Master-Key': API_KEY_ACC } });
+                const data2 = await getRes2.json();
+                let accUsers = data2.record.users || [];
+
+                const formattedUser = {
+                    id: userToAcc.id, email: userToAcc.email, telepon: userToAcc.telepon,
+                    status: userToAcc.status, tanggal: userToAcc.tanggal, catatan: "-" 
+                };
+
+                accUsers.push(formattedUser);
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ACC_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_ACC },
+                    body: JSON.stringify({ users: accUsers })
+                });
+
+                await removeLocalAndServer(index);
+                alert("Data di-ACC.");
+                loadPendingReports();
+            } catch (e) { alert("Gagal ACC: " + e.message); }
+        }
+
+        // --- NEW FEATURE: TOLAK LANGSUNG KE WHATSAPP ---
+        async function processTolak(index) {
+            const user = window.pendingUsers[index];
+            if (!confirm("Yakin tolak laporan ini? Data akan dihapus.")) return;
+
+            // Logic Format Nomor HP
+            let hp = user.telepon.replace(/\D/g, ''); // Hapus semua karakter non-angka
+            if (hp.startsWith('0')) {
+                hp = '62' + hp.slice(1);
+            } else if (!hp.startsWith('62')) {
+                hp = '62' + hp; // Jaga-jaga kalau user input tanpa 0 atau 62
+            }
+            
+            // Pesan Template WhatsApp
+            const pesan = encodeURIComponent("Halo, laporan Success Rental Anda kami tolak karena bukti tidak valid/kurang lengkap. Silakan cek rules dan kirim ulang.");
+            const waLink = `https://wa.me/${hp}?text=${pesan}`;
+
+            // 1. Buka WhatsApp di tab baru
+            window.open(waLink, '_blank');
+
+            // 2. Hapus data dari server
+            await removeLocalAndServer(index);
+            
+            alert("Laporan ditolak. WhatsApp user dibuka.");
+            loadPendingReports();
+        }
+
+        async function removeLocalAndServer(index) {
+            window.pendingUsers.splice(index, 1);
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING },
+                body: JSON.stringify({ users: window.pendingUsers })
+            });
+        }
+    </script>
+</body>
+</html>
