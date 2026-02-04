@@ -47,7 +47,7 @@
             border: var(--border);
             box-shadow: var(--shadow-hard);
             padding: 20px 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
             transform: rotate(-1deg);
             margin-left: 5px;
@@ -81,9 +81,27 @@
             border: var(--border);
             box-shadow: var(--shadow-hard);
             padding: 20px 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             position: relative;
             border-radius: 4px;
+        }
+
+        /* INFO BOX (NEW CONTENT) */
+        .info-box {
+            background-color: var(--accent);
+            border: var(--border);
+            box-shadow: var(--shadow-hard);
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            transform: rotate(1deg);
+        }
+
+        .info-text {
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.4;
         }
 
         /* EXAMPLE SECTION */
@@ -111,7 +129,7 @@
             display: block;
         }
 
-        /* ADMIN BUTTON (Floating) */
+        /* ADMIN BUTTON */
         .admin-float-btn {
             position: fixed;
             top: 10px;
@@ -222,42 +240,7 @@
             box-shadow: 1px 1px 0px #000;
         }
 
-        /* ANIMASI LOADING */
-        .loader-container {
-            display: none;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .loading-text {
-            font-weight: 900;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            animation: blink 0.5s infinite;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .loading-bar {
-            width: 100%;
-            height: 25px;
-            border: 3px solid #000;
-            background: repeating-linear-gradient(
-                45deg,
-                var(--primary),
-                var(--primary) 15px,
-                #000 15px,
-                #000 30px
-            );
-            background-size: 200% 200%;
-            animation: barberpole 1s linear infinite;
-            box-shadow: 3px 3px 0 #000;
-        }
-
-        @keyframes barberpole { 0% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* ADMIN PANEL (Responsive) */
+        /* ADMIN PANEL */
         #adminPanel {
             display: none;
             border: var(--border);
@@ -267,13 +250,164 @@
             overflow-x: auto;
         }
 
+        .admin-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary);
+            border: 2px solid #000;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .stat-count {
+            background: #000;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
         .report-item {
             font-size: 0.9rem;
+            position: relative;
         }
         
         .report-actions {
             flex-direction: column;
             gap: 8px;
+        }
+
+        .admin-thumb-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            background: #f0f0f0;
+            border: 1px dashed #000;
+            padding: 5px;
+        }
+
+        .preview-img-admin {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid #000;
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+
+        .preview-img-admin:hover {
+            transform: scale(1.1);
+        }
+
+        .click-hint {
+            font-size: 0.75rem;
+            color: #555;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        /* --- POPUP MODAL STYLES --- */
+        .notif-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .notif-box {
+            background: #fff;
+            border: 3px solid #000;
+            box-shadow: 10px 10px 0px #000;
+            padding: 30px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .notif-box.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .notif-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .notif-title {
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .blink-text {
+            animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        .notif-message {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .notif-btn {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        /* Loading Bar Animation */
+        .loading-bar-wrapper {
+            width: 100%;
+            height: 30px;
+            background: #fff;
+            border: 3px solid #000;
+            margin-top: 15px;
+            overflow: hidden;
+            box-shadow: 4px 4px 0 #888;
+        }
+
+        .loading-bar-modal {
+            width: 150%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--primary),
+                var(--primary) 20px,
+                #000 20px,
+                #000 40px
+            );
+            animation: moveStripes 1s linear infinite;
+        }
+
+        @keyframes moveStripes {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-40px); }
         }
 
         @media screen and (max-width: 380px) {
@@ -286,6 +420,26 @@
 </head>
 <body>
 
+    <div id="loadingModal" class="notif-overlay">
+        <div class="notif-box show" style="transform: scale(1); opacity: 1;">
+            <span class="notif-icon">🚀</span>
+            <span class="notif-title blink-text">SEDANG MENGIRIM...</span>
+            <p class="notif-message">Mohon tunggu, jangan tutup halaman.</p>
+            <div class="loading-bar-wrapper">
+                <div class="loading-bar-modal"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customNotif" class="notif-overlay">
+        <div class="notif-box" id="notifBox">
+            <span class="notif-icon" id="notifIcon">✅</span>
+            <span class="notif-title" id="notifTitle">BERHASIL!</span>
+            <span class="notif-message" id="notifMsg">Laporan Anda telah terkirim.</span>
+            <button class="notif-btn" id="notifBtn" onclick="closeNotif()">OKE, SIAP!</button>
+        </div>
+    </div>
+
     <button class="admin-float-btn" onclick="toggleAdmin()" title="Mode Admin">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.7 7l3.3 3.3L7 20.3c-.6.6-1.5.6-2.1 0l-1.2-1.2c-.6-.6-.6-1.5 0-2.1L13.7 7zm5.5-2.7l-1.5 1.5-3.3-3.3 1.5-1.5c1-1 2.6-1 3.6 0l-1.4 1.4.6.6 1.4-1.4c1 1 1 2.6 0 3.6-.8.8-1.5.1-.9-.9zM3 21l3-3-2-1-1 2 1 1z"/>
@@ -297,6 +451,14 @@
             <h1>SUCCESS RENTAL<br>ZEN X 8800</h1>
             <p class="subtitle">Wajib laporan dengan baik & benar</p>
         </header>
+
+        <div class="info-box">
+            <p class="info-text">
+                📢 INFO: Kalau sudah laporan di web ini, kalian 
+                <span style="text-decoration: underline; color: #000; background: yellow;">TIDAK PERLU</span> 
+                lapor admin lagi.
+            </p>
+        </div>
 
         <div class="card" style="text-align: center;">
             <div class="example-badge">💡 CONTOH VALID</div>
@@ -327,6 +489,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Kode Inviter (Opsional)</label>
+                    <input type="text" id="inviter" placeholder="Contoh: AGEN01 (Boleh Kosong)">
+                </div>
+
+                <div class="form-group">
                     <label>Tanggal (Auto)</label>
                     <input type="text" id="tanggal" readonly>
                 </div>
@@ -341,17 +508,17 @@
                 </div>
 
                 <button class="btn" onclick="submitReport()" id="btnSubmit">Kirim Laporan</button>
-                
-                <div class="loader-container" id="loader">
-                    <span class="loading-text">MENGIRIM DATA...</span>
-                    <div class="loading-bar"></div>
-                </div>
-
             </div>
         </div>
 
         <div id="adminPanel">
             <h2 style="margin-top:0; font-size:1.2rem; border-bottom: 3px solid #000; padding-bottom:10px;">🛡️ Admin Panel</h2>
+            
+            <div class="admin-stats">
+                <span>JUMLAH ANTRIAN:</span>
+                <span class="stat-count" id="requestCount">0</span>
+            </div>
+
             <button class="btn" style="margin-bottom: 15px; background: #fff; color:#000; font-size: 0.9rem; padding: 10px;" onclick="loadPendingReports()">Refresh Data</button>
             <div id="adminContent">
                 <p style="font-size:0.9rem">Klik refresh untuk data baru...</p>
@@ -371,12 +538,45 @@
         // Auto Date
         document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
 
-        // --- IMAGE PREVIEW LOGIC ---
+        // --- HELPER FUNCTIONS ---
+        let reloadOnClose = false;
+
+        function showLoading() {
+            document.getElementById('loadingModal').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingModal').style.display = 'none';
+        }
+
+        function showNotif(title, message, icon="✅", shouldReload=false) {
+            document.getElementById('notifTitle').innerText = title;
+            document.getElementById('notifMsg').innerText = message;
+            document.getElementById('notifIcon').innerText = icon;
+            
+            const overlay = document.getElementById('customNotif');
+            const box = document.getElementById('notifBox');
+            
+            overlay.style.display = 'flex';
+            setTimeout(() => { box.classList.add('show'); }, 10);
+            reloadOnClose = shouldReload;
+        }
+
+        function closeNotif() {
+            const overlay = document.getElementById('customNotif');
+            const box = document.getElementById('notifBox');
+            box.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                if (reloadOnClose) location.reload();
+            }, 300);
+        }
+
+        // --- IMAGE PREVIEW ---
         document.getElementById('buktiImg').addEventListener('change', function(event) {
             const file = event.target.files[0];
             const previewContainer = document.getElementById('previewContainer');
             const imgPreview = document.getElementById('imgPreview');
-
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -390,28 +590,26 @@
             }
         });
 
-        // --- USER FUNCTIONS ---
+        // --- USER SUBMIT ---
         async function submitReport() {
             const email = document.getElementById('email').value;
             const telepon = document.getElementById('telepon').value;
             const status = document.getElementById('status').value;
+            const inviter = document.getElementById('inviter').value; // Get Inviter Code
             const tanggal = document.getElementById('tanggal').value;
             const fileInput = document.getElementById('buktiImg');
 
             if (!email || !telepon || fileInput.files.length === 0) {
-                alert("Wajib isi semua kolom & upload gambar!");
+                showNotif("EITS!", "Isi semua data & upload bukti dulu bro!", "⚠️");
                 return;
             }
 
             const btn = document.getElementById('btnSubmit');
-            const loader = document.getElementById('loader');
-            
             btn.disabled = true;
-            btn.innerText = "WAIT..."; 
-            loader.style.display = 'block'; 
+            showLoading();
 
             try {
-                // 1. Upload Image
+                // Upload Image
                 const formData = new FormData();
                 formData.append('file', fileInput.files[0]);
                 formData.append('upload_preset', CLOUDINARY_PRESET);
@@ -420,20 +618,25 @@
                 const imgData = await imgRes.json();
                 const imgUrl = imgData.secure_url;
 
-                // 2. Prepare Data
+                // Prepare Data (Termasuk Inviter)
                 const reportId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 const newReport = {
-                    id: reportId, email: email, telepon: telepon, status: status, tanggal: tanggal, bukti_url: imgUrl 
+                    id: reportId, 
+                    email: email, 
+                    telepon: telepon, 
+                    status: status, 
+                    inviter: inviter, // Save Inviter
+                    tanggal: tanggal, 
+                    bukti_url: imgUrl 
                 };
 
-                // 3. Get Data
+                // Update Pending DB
                 const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, {
                     headers: { 'X-Master-Key': API_KEY_PENDING }
                 });
                 const getData = await getRes.json();
                 let currentUsers = getData.record.users || [];
 
-                // 4. Update Data
                 currentUsers.push(newReport);
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, {
                     method: 'PUT',
@@ -441,15 +644,14 @@
                     body: JSON.stringify({ users: currentUsers })
                 });
 
-                alert("Laporan Terkirim!");
-                location.reload(); 
+                hideLoading();
+                showNotif("SUKSES!", "Laporan berhasil terkirim. Tunggu admin ya!", "🎉", true);
 
             } catch (error) {
                 console.error(error);
-                alert("Error: " + error.message);
+                hideLoading();
+                showNotif("ERROR", "Sistem bermasalah: " + error.message, "❌");
                 btn.disabled = false;
-                btn.innerText = "KIRIM LAPORAN";
-                loader.style.display = 'none';
             }
         }
 
@@ -457,26 +659,24 @@
         function toggleAdmin() {
             const panel = document.getElementById('adminPanel');
             const userPanel = document.getElementById('userPanel');
-            
             if (panel.style.display === 'block') {
                 panel.style.display = 'none';
                 userPanel.style.display = 'block';
                 return;
             }
-
             const pass = prompt("Masukkan Password Admin:");
-            // Password Admin: 2003
             if (pass === '2003') {
                 panel.style.display = 'block';
                 userPanel.style.display = 'none';
                 loadPendingReports();
             } else {
-                alert("Password salah");
+                showNotif("AKSES DITOLAK", "Password salah cuy.", "⛔");
             }
         }
 
         async function loadPendingReports() {
             const content = document.getElementById('adminContent');
+            const countBadge = document.getElementById('requestCount');
             content.innerHTML = "Loading...";
 
             try {
@@ -485,6 +685,7 @@
                 });
                 const data = await res.json();
                 const users = data.record.users || [];
+                countBadge.innerText = users.length;
 
                 if (users.length === 0) {
                     content.innerHTML = "<p>Tidak ada laporan.</p>";
@@ -493,12 +694,19 @@
 
                 let html = '';
                 users.forEach((u, index) => {
+                    const inviterCode = u.inviter ? `<b>${u.inviter}</b>` : '-';
                     html += `
                         <div class="report-item" style="background:#f9f9f9; border:2px solid #000; padding:10px; margin-bottom:15px;">
                             <div><strong>Email:</strong> <br>${u.email}</div>
                             <div style="margin-top:5px;"><strong>Status:</strong> ${u.status}</div>
-                            <div style="margin-top:5px;"><a href="${u.bukti_url}" target="_blank" style="color:blue; font-weight:bold;">Lihat Bukti</a></div>
-                            <img src="${u.bukti_url}" style="width:100%; height:auto; margin-top:5px; border:1px solid #000;">
+                            <div style="margin-top:5px; background: #ffffcc; padding: 2px;"><strong>Inviter:</strong> ${inviterCode}</div>
+                            
+                            <div class="admin-thumb-container">
+                                <a href="${u.bukti_url}" target="_blank">
+                                    <img src="${u.bukti_url}" class="preview-img-admin" alt="Bukti">
+                                </a>
+                                <span class="click-hint">Klik gambar<br>untuk zoom</span>
+                            </div>
                             
                             <div class="report-actions" style="display:flex; gap:10px; margin-top:10px;">
                                 <button class="btn-acc" onclick="processAcc(${index})" style="padding:10px; background:#4CAF50; color:white; border:2px solid black; font-weight:bold; width:100%;">TERIMA</button>
@@ -511,6 +719,7 @@
                 window.pendingUsers = users; 
             } catch (e) {
                 content.innerHTML = "Gagal memuat.";
+                countBadge.innerText = "0";
             }
         }
 
@@ -523,12 +732,24 @@
                 const data2 = await getRes2.json();
                 let accUsers = data2.record.users || [];
 
+                // Simpan Kode Inviter juga ke database ACC
                 const formattedUser = {
-                    id: userToAcc.id, email: userToAcc.email, telepon: userToAcc.telepon,
-                    status: userToAcc.status, tanggal: userToAcc.tanggal, catatan: "-" 
+                    id: userToAcc.id, 
+                    email: userToAcc.email, 
+                    telepon: userToAcc.telepon,
+                    status: userToAcc.status, 
+                    inviter: userToAcc.inviter, // Passed here
+                    tanggal: userToAcc.tanggal, 
+                    catatan: "-" 
                 };
 
-                accUsers.push(formattedUser);
+                const existingIndex = accUsers.findIndex(u => u.email.toLowerCase() === userToAcc.email.toLowerCase());
+                if (existingIndex !== -1) {
+                    accUsers[existingIndex] = formattedUser;
+                } else {
+                    accUsers.push(formattedUser);
+                }
+
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_ACC_ID}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_ACC },
@@ -536,35 +757,26 @@
                 });
 
                 await removeLocalAndServer(index);
-                alert("Data di-ACC.");
+                showNotif("BERHASIL", "Data sudah di-ACC & Update!", "✅");
                 loadPendingReports();
-            } catch (e) { alert("Gagal ACC: " + e.message); }
+            } catch (e) { showNotif("ERROR", e.message, "❌"); }
         }
 
-        // --- NEW FEATURE: TOLAK LANGSUNG KE WHATSAPP ---
         async function processTolak(index) {
             const user = window.pendingUsers[index];
-            if (!confirm("Yakin tolak laporan ini? Data akan dihapus.")) return;
+            if (!confirm("Yakin tolak laporan ini?")) return;
 
-            // Logic Format Nomor HP
-            let hp = user.telepon.replace(/\D/g, ''); // Hapus semua karakter non-angka
-            if (hp.startsWith('0')) {
-                hp = '62' + hp.slice(1);
-            } else if (!hp.startsWith('62')) {
-                hp = '62' + hp; // Jaga-jaga kalau user input tanpa 0 atau 62
-            }
+            let hp = user.telepon.replace(/\D/g, ''); 
+            if (hp.startsWith('0')) hp = '62' + hp.slice(1);
+            else if (!hp.startsWith('62')) hp = '62' + hp; 
             
-            // Pesan Template WhatsApp
             const pesan = encodeURIComponent("Halo, laporan Success Rental Anda kami tolak karena bukti tidak valid/kurang lengkap. Silakan cek rules dan kirim ulang.");
             const waLink = `https://wa.me/${hp}?text=${pesan}`;
 
-            // 1. Buka WhatsApp di tab baru
             window.open(waLink, '_blank');
-
-            // 2. Hapus data dari server
             await removeLocalAndServer(index);
             
-            alert("Laporan ditolak. WhatsApp user dibuka.");
+            showNotif("DITOLAK", "Laporan dihapus & WA dibuka.", "👋");
             loadPendingReports();
         }
 
