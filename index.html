@@ -820,31 +820,39 @@
             }
         }
 
-        // --- FUNGSI ACC KE SUPABASE ---
+       // --- FUNGSI ACC KE SUPABASE (PERBAIKAN UPSERT) ---
         async function processAcc(index) {
             const userToAcc = window.pendingUsers[index];
-            if (!confirm(`ACC ${userToAcc.email} dan simpan ke Supabase?`)) return;
+            if (!confirm(`ACC ${userToAcc.email} dan simpan/update ke Supabase?`)) return;
 
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             try {
+                // PERBAIKAN: Menggunakan .upsert() bukan .insert()
+                // Pastikan kolom 'email' di Supabase Anda sudah diset sebagai PRIMARY KEY atau UNIQUE
                 const { error } = await db
                     .from(NAMA_TABEL_SUPABASE)
-                    .insert([{
-                        email: userToAcc.email,
-                        whatsapp: userToAcc.telepon, 
-                        status: userToAcc.status,
-                        tanggal: userToAcc.tanggal
-                    }]);
+                    .upsert([
+                        {
+                            email: userToAcc.email,
+                            whatsapp: userToAcc.telepon, 
+                            status: userToAcc.status,
+                            tanggal: userToAcc.tanggal
+                        }
+                    ], { onConflict: 'email' }); // Opsi ini memastikan update dilakukan jika email sama
 
                 if (error) {
                     throw new Error("Gagal simpan ke Supabase: " + error.message);
                 }
 
+                // Hapus dari antrian (JSONBin) setelah sukses masuk DB
                 await removeLocalAndServer(index);
                 
-                showNotif("SUKSES", "Data tersimpan di Database & Antrian bersih.", "💾");
-                loadPendingReports();
+                showNotif("SUKSES", "Data tersimpan/diupdate di Database & Antrian bersih.", "💾");
+                
+                // Refresh tampilan admin agar data yang sudah di-acc hilang dari list
+                loadPendingReports(); 
+
             } catch (e) { 
                 console.error(e);
                 showNotif("ERROR DB", e.message, "❌"); 
