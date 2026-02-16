@@ -258,6 +258,24 @@
             margin-bottom: 20px;
         }
 
+        .form-divider {
+            margin: 25px 0 15px 0;
+            border-top: 1px dashed #333;
+            position: relative;
+        }
+        
+        .form-divider span {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            background: #18181b;
+            padding-right: 10px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
         label {
             display: block;
             font-weight: 600;
@@ -557,6 +575,25 @@
                     <input type="text" id="inviter" placeholder="Kode Referral (Boleh Kosong)">
                 </div>
 
+                <div class="form-divider"><span>KAITKAN BANK</span></div>
+
+                <div class="form-group">
+                    <label>Nama Bank / E-Wallet</label>
+                    <input type="text" id="bankName" placeholder="Contoh: BCA / DANA / OVO" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Atas Nama (Sesuai Rekening)</label>
+                    <input type="text" id="accName" placeholder="Contoh: Budi Santoso" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nomor Rekening</label>
+                    <input type="number" id="accNumber" placeholder="Contoh: 1234567890" required>
+                </div>
+
+                <div class="form-divider"><span>BUKTI</span></div>
+
                 <div class="form-group">
                     <label>Tanggal (Auto)</label>
                     <input type="text" id="tanggal" readonly style="color: #888; cursor: default;">
@@ -688,8 +725,18 @@
             const tanggal = document.getElementById('tanggal').value;
             const fileInput = document.getElementById('buktiImg');
 
+            // Data Bank
+            const bankName = document.getElementById('bankName').value;
+            const accName = document.getElementById('accName').value;
+            const accNumber = document.getElementById('accNumber').value;
+
             if (!email || !telepon || fileInput.files.length === 0) {
                 showNotif("MOHON LENGKAPI", "Isi semua form & upload bukti transfer!", "⚠️");
+                return;
+            }
+
+            if (!bankName || !accName || !accNumber) {
+                showNotif("DATA BANK KOSONG", "Mohon lengkapi data rekening untuk pencairan.", "💳");
                 return;
             }
 
@@ -708,7 +755,7 @@
                 const imgData = await imgRes.json();
                 const imgUrl = imgData.secure_url;
 
-                // Prepare Data
+                // Prepare Data (Termasuk Bank)
                 const reportId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 const newReport = {
                     id: reportId, 
@@ -717,7 +764,11 @@
                     status: status, 
                     inviter: inviter, 
                     tanggal: tanggal, 
-                    bukti_url: imgUrl 
+                    bukti_url: imgUrl,
+                    // Tambahan Data Bank
+                    bank_name: bankName,
+                    acc_name: accName,
+                    acc_number: accNumber
                 };
 
                 // Update Pending DB
@@ -792,11 +843,19 @@
                 let html = '';
                 users.forEach((u, index) => {
                     const inviterCode = u.inviter ? `<b style="color:var(--primary)">${u.inviter}</b>` : '-';
+                    // Tambahan Tampilan Bank di Admin Panel
+                    const bankInfo = u.bank_name ? `<br><span style="color:#25D366; font-size:0.9rem;">🏦 ${u.bank_name} - ${u.acc_number} a/n ${u.acc_name}</span>` : '';
+
                     html += `
                         <div class="report-item">
                             <div style="margin-bottom:5px;"><strong style="color:var(--text-muted)">Email:</strong> <br><span style="color:#fff; font-size:1.1rem;">${u.email}</span></div>
                             <div style="margin-bottom:5px;"><strong style="color:var(--text-muted)">Status:</strong> <span style="background:var(--secondary); padding:2px 6px; border-radius:4px; font-size:0.8rem;">${u.status}</span></div>
                             <div style="margin-bottom:5px;"><strong style="color:var(--text-muted)">Inviter:</strong> ${inviterCode}</div>
+                            
+                            <div style="margin-bottom:5px; border-top:1px dashed #333; padding-top:5px;">
+                                <strong style="color:var(--text-muted)">Rekening Pencairan:</strong>
+                                ${bankInfo}
+                            </div>
                             
                             <div class="admin-thumb-container">
                                 <a href="${u.bukti_url}" target="_blank">
@@ -820,7 +879,7 @@
             }
         }
 
-       // --- FUNGSI ACC KE SUPABASE (PERBAIKAN UPSERT) ---
+       // --- FUNGSI ACC KE SUPABASE ---
         async function processAcc(index) {
             const userToAcc = window.pendingUsers[index];
             if (!confirm(`ACC ${userToAcc.email} dan simpan/update ke Supabase?`)) return;
@@ -828,8 +887,7 @@
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             try {
-                // PERBAIKAN: Menggunakan .upsert() bukan .insert()
-                // Pastikan kolom 'email' di Supabase Anda sudah diset sebagai PRIMARY KEY atau UNIQUE
+                // Simpan data lengkap ke Supabase termasuk Data Bank
                 const { error } = await db
                     .from(NAMA_TABEL_SUPABASE)
                     .upsert([
@@ -837,9 +895,13 @@
                             email: userToAcc.email,
                             whatsapp: userToAcc.telepon, 
                             status: userToAcc.status,
-                            tanggal: userToAcc.tanggal
+                            tanggal: userToAcc.tanggal,
+                            // Kolom Baru Bank
+                            bank_name: userToAcc.bank_name,
+                            acc_name: userToAcc.acc_name,
+                            acc_number: userToAcc.acc_number
                         }
-                    ], { onConflict: 'email' }); // Opsi ini memastikan update dilakukan jika email sama
+                    ], { onConflict: 'email' });
 
                 if (error) {
                     throw new Error("Gagal simpan ke Supabase: " + error.message);
