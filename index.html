@@ -491,14 +491,15 @@
         });
 
         async function submitReport() {
-            const email = document.getElementById('email').value;
-            const telepon = document.getElementById('telepon').value;
+            // MENGUBAH EMAIL KE HURUF KECIL SEMUA SAAT DIKIRIM OLEH USER
+            const email = document.getElementById('email').value.toLowerCase().trim(); 
+            const telepon = document.getElementById('telepon').value.trim();
             const status = document.getElementById('status').value;
-            const inviter = document.getElementById('inviter').value; 
+            const inviter = document.getElementById('inviter').value.trim(); 
             const fileInput = document.getElementById('buktiImg');
-            const bankName = document.getElementById('bankName').value;
-            const accName = document.getElementById('accName').value;
-            const accNumber = document.getElementById('accNumber').value;
+            const bankName = document.getElementById('bankName').value.trim();
+            const accName = document.getElementById('accName').value.trim();
+            const accNumber = document.getElementById('accNumber').value.trim();
 
             if (!email || !telepon || fileInput.files.length === 0) {
                 showNotif("MOHON LENGKAPI", "Isi form yang wajib (*) & upload bukti!", "⚠️");
@@ -803,9 +804,20 @@
             if (!confirm(`ACC ${userToAcc.email} dan simpan ke Supabase?`)) return;
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
+            // MENGUBAH EMAIL KE HURUF KECIL SEBAGAI PENGAMAN TAMBAHAN SEBELUM MASUK SUPABASE
+            const emailNormal = userToAcc.email.toLowerCase().trim();
+
             try {
                 const { error } = await db.from(NAMA_TABEL_SUPABASE).upsert([
-                    { email: userToAcc.email, whatsapp: userToAcc.telepon, status: userToAcc.status, tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number }
+                    { 
+                        email: emailNormal, 
+                        whatsapp: userToAcc.telepon, 
+                        status: userToAcc.status, 
+                        tanggal: userToAcc.tanggal, 
+                        bank_name: userToAcc.bank_name, 
+                        acc_name: userToAcc.acc_name, 
+                        acc_number: userToAcc.acc_number 
+                    }
                 ], { onConflict: 'email' });
 
                 if (error) throw new Error("Gagal simpan ke Supabase: " + error.message);
