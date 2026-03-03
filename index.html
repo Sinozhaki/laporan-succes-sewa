@@ -74,6 +74,10 @@
         input, select { width: 100%; padding: 16px 16px 16px 45px; border: var(--neo-border); background: #fff; color: var(--text-main); font-weight: 700; font-size: 1rem; outline: none; border-radius: 8px; transition: 0.1s; box-shadow: var(--neo-shadow-sm); }
         input:focus, select:focus { transform: translate(2px, 2px); box-shadow: var(--neo-shadow-hover); background: var(--focus-bg); color: #000; }
         input::placeholder { color: #7a8288; font-weight: 600; }
+        
+        /* EFEK INPUT DISABLED (TERKUNCI) */
+        input:disabled { background: #dfe4ea; color: #7a8288; cursor: not-allowed; border-style: dashed; box-shadow: none; transform: none; }
+
         input[type="file"] { padding: 12px; padding-left: 12px; background: #dfe4ea; font-size: 0.85rem; cursor: pointer; border: 3px dashed #1e272e; box-shadow: none; }
         input[type="file"]:focus { transform: none; box-shadow: none; border-color: var(--primary); background: var(--hover-cyan); }
         .microcopy { display: block; font-size: 0.75rem; color: #57606f; margin-top: 8px; font-weight: 600; line-height: 1.3; }
@@ -435,6 +439,19 @@
 
         let reloadOnClose = false;
 
+        // FITUR BARU: LOGIKA KUNCI KOLOM INVITER
+        document.getElementById('status').addEventListener('change', function(e) {
+            const inviterInput = document.getElementById('inviter');
+            if (e.target.value === 'Unrestric') {
+                inviterInput.value = ''; // Kosongin isinya biar gak nyasar
+                inviterInput.disabled = true; // Kunci
+                inviterInput.placeholder = "Tidak tersedia untuk Unrestric";
+            } else {
+                inviterInput.disabled = false; // Buka kunci
+                inviterInput.placeholder = "Masukkan jika ada";
+            }
+        });
+
         function showLoading() { document.getElementById('loadingModal').style.display = 'flex'; }
         function hideLoading() { document.getElementById('loadingModal').style.display = 'none'; }
 
@@ -570,7 +587,8 @@
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             const emailNormal = userToAcc.email.toLowerCase().trim();
-            const inviterCode = userToAcc.inviter ? userToAcc.inviter.trim() : ""; 
+            // FITUR BARU: AUTO UPPERCASE (Kapital Otomatis)
+            const inviterCode = userToAcc.inviter ? userToAcc.inviter.trim().toUpperCase() : ""; 
 
             try {
                 // 1. Simpan ke Supabase
@@ -580,8 +598,9 @@
 
                 if (error) throw new Error("Gagal DB Supabase: " + error.message);
 
-                // 2. Simpan ke JSONBin Referral (Jika ada kode inviter)
-                if (inviterCode !== "") {
+                // 2. Simpan ke JSONBin Referral (Jika ada kode inviter & Status New Acc)
+                // Aku tambahin syarat status wajib New Acc biar makin aman sesuai request.
+                if (inviterCode !== "" && userToAcc.status === "New Acc") {
                     try {
                         const refRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}/latest`, { 
                             headers: { 'X-Master-Key': API_KEY_REFERRAL } 
@@ -591,7 +610,6 @@
                         const refData = await refRes.json();
                         let existingRecord = refData.record || {}; 
                         
-                        // FIX UTAMA: Pakai laci 'users' dengan properti 'code' & 'email'
                         let currentUsers = existingRecord.users || [];
 
                         currentUsers.push({
@@ -617,7 +635,7 @@
 
                 // 3. Hapus antrian lokal & notif
                 await removeLocalAndServer(index);
-                const notifMsg = inviterCode ? "Data aman di Supabase & Catatan Referral!" : "Data aman di Supabase.";
+                const notifMsg = (inviterCode && userToAcc.status === "New Acc") ? "Data aman di Supabase & Catatan Referral!" : "Data aman di Supabase.";
                 showNotif("SUKSES ACC", notifMsg, "💾"); 
                 loadPendingReports(); 
             } catch (e) { console.error(e); showNotif("ERROR", e.message, "❌"); }
