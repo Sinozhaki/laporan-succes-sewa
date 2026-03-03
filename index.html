@@ -12,176 +12,106 @@
 
     <style>
         :root {
-            /* NEO BRUTALISM PALETTE */
-            --bg-body: #ffd32a; /* Kuning berani */
+            --bg-body: #ffd32a;
             --bg-card: #ffffff;
-            --primary: #0fb9b1; /* Teal/Cyan */
-            --secondary: #ff3f34; /* Merah cerah */
-            --accent: #8c7ae6; /* Ungu */
+            --primary: #0fb9b1;
+            --secondary: #ff3f34;
+            --accent: #8c7ae6;
             --text-main: #1e272e;
             --neo-border: 3px solid #1e272e;
             --neo-shadow: 6px 6px 0px #1e272e;
             --neo-shadow-hover: 2px 2px 0px #1e272e;
             --neo-shadow-sm: 4px 4px 0px #1e272e;
-            
-            /* High Contrast Colors for Focus/Hover */
-            --focus-bg: #ff9ff3; /* Neon Pink */
-            --hover-cyan: #7efff5; /* Neon Cyan */
-            --hover-green: #32ff7e; /* Neon Green */
+            --focus-bg: #ff9ff3;
+            --hover-cyan: #7efff5;
+            --hover-green: #32ff7e;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            background-image: radial-gradient(#1e272e 1px, transparent 1px);
-            background-size: 20px 20px;
-            margin: 0;
-            padding: 15px;
-            color: var(--text-main);
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* --- ORNAMEN NEO BRUTALISM (Ringan) --- */
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-body); background-image: radial-gradient(#1e272e 1px, transparent 1px); background-size: 20px 20px; margin: 0; padding: 15px; color: var(--text-main); overflow-x: hidden; min-height: 100vh; position: relative; }
         .neo-shape { position: absolute; z-index: 0; pointer-events: none; opacity: 0.9; }
         .shape-star { top: 2%; left: 3%; width: 60px; animation: spin 8s linear infinite; }
         .shape-circle { top: 15%; right: 5%; width: 50px; animation: bounce-slow 4s ease-in-out infinite alternate; }
-
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes bounce-slow { 100% { transform: translateY(20px) rotate(10deg); } }
-
-        /* --- DRAGGABLE STICKERS --- */
-        .draggable-sticker {
-            position: absolute;
-            z-index: 50;
-            cursor: grab;
-            user-select: none;
-            touch-action: none; /* Mencegah layar ikut scroll saat stiker digeser di HP */
-            filter: drop-shadow(4px 4px 0px #1e272e);
-            transition: filter 0.1s ease, transform 0.1s ease;
-        }
-        .draggable-sticker:active {
-            cursor: grabbing;
-            transform: scale(0.95);
-            filter: drop-shadow(2px 2px 0px #1e272e);
-        }
-
+        .draggable-sticker { position: absolute; z-index: 50; cursor: grab; user-select: none; touch-action: none; filter: drop-shadow(4px 4px 0px #1e272e); transition: filter 0.1s ease, transform 0.1s ease; }
+        .draggable-sticker:active { cursor: grabbing; transform: scale(0.95); filter: drop-shadow(2px 2px 0px #1e272e); }
         .container { width: 100%; max-width: 600px; margin: 0 auto; margin-top: 30px; padding-bottom: 50px; transition: max-width 0.3s ease; position: relative; z-index: 1; }
         .container.admin-active { max-width: 1200px; }
-
         header { text-align: center; margin-bottom: 30px; }
-        
         .title-box { background: var(--bg-card); border: var(--neo-border); box-shadow: var(--neo-shadow); padding: 20px; border-radius: 12px; display: inline-block; transform: rotate(-2deg); transition: 0.2s; }
         .title-box:hover { transform: rotate(0deg); background: var(--hover-cyan); }
-
         h1 { font-weight: 900; text-transform: uppercase; margin: 0; font-size: 2.2rem; line-height: 1; color: var(--text-main); }
         h1 span { color: var(--secondary); }
-        
         p.subtitle { font-weight: 800; font-size: 0.9rem; margin-top: 10px; color: #fff; display: inline-block; padding: 8px 20px; background: var(--accent); border: var(--neo-border); box-shadow: var(--neo-shadow-sm); border-radius: 0; text-transform: uppercase; }
-
-        /* MARQUEE PENGUMUMAN */
         .info-box { background: var(--primary); border: var(--neo-border); box-shadow: var(--neo-shadow); margin-bottom: 30px; border-radius: 8px; overflow: hidden; white-space: nowrap; padding: 12px 0; transition: 0.2s; }
         .info-box:hover { background: var(--text-main); }
         .marquee-text { display: inline-block; font-weight: 800; font-size: 1rem; color: #fff; text-transform: uppercase; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
         .card-example { background-color: var(--bg-card); border: var(--neo-border); box-shadow: var(--neo-shadow); padding: 20px; margin-bottom: 30px; border-radius: 12px; text-align: center; transition: 0.2s; }
         .card-example:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px #1e272e; }
         .example-badge { background: var(--text-main); color: #fff; padding: 8px 16px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; display: inline-block; border: 2px solid #fff; outline: 3px solid var(--text-main); margin-bottom: 15px; }
         .example-img { width: 100%; max-width: 200px; height: auto; border-radius: 8px; border: var(--neo-border); margin: 10px auto; display: block; box-shadow: var(--neo-shadow-sm); }
-
         .cta-container { display: flex; justify-content: center; margin: 40px 0; }
-        
-        /* TOMBOL NEO BRUTALISM */
         .btn-neo { background: var(--secondary); color: #fff; font-size: 1.2rem; font-weight: 900; padding: 18px 40px; border: var(--neo-border); border-radius: 8px; cursor: pointer; box-shadow: var(--neo-shadow); text-transform: uppercase; letter-spacing: 1px; width: 100%; max-width: 320px; transition: all 0.1s ease-in-out; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-neo:hover { background: var(--hover-green); color: #000; }
         .btn-neo:active { transform: translate(4px, 4px); box-shadow: var(--neo-shadow-hover); }
-
-        /* --- MODAL POPUP --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 39, 46, 0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; padding: 20px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: var(--bg-card); width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; border-radius: 12px; padding: 30px 25px; border: var(--neo-border); box-shadow: 12px 12px 0px rgba(0,0,0,1); transform: translateY(-50px); opacity: 0; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .modal-overlay.active .modal-content { transform: translateY(0); opacity: 1; }
-        
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: var(--neo-border); padding-bottom: 15px; }
         .modal-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin: 0; text-transform: uppercase; }
         .close-modal { background: var(--bg-body); border: var(--neo-border); color: var(--text-main); width: 36px; height: 36px; border-radius: 0; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 2px 2px 0px #000; transition: 0.1s; }
         .close-modal:hover { background: var(--secondary); color: #fff; }
         .close-modal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-
         .form-group { margin-bottom: 22px; }
         label { display: block; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; color: var(--text-main); margin-bottom: 8px; }
         .required-star { color: var(--secondary); font-size: 1.2rem; line-height: 0; position: relative; top: 3px; }
         .badge-optional { background: var(--bg-body); border: 2px solid #000; color: #000; font-size: 0.65rem; padding: 3px 8px; float: right; font-weight: 800; box-shadow: 2px 2px 0px #000; }
-        
         .input-with-icon { position: relative; }
         .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; }
-        
         input, select { width: 100%; padding: 16px 16px 16px 45px; border: var(--neo-border); background: #fff; color: var(--text-main); font-weight: 700; font-size: 1rem; outline: none; border-radius: 8px; transition: 0.1s; box-shadow: var(--neo-shadow-sm); }
-        
-        /* EFEK KONTRAS TINGGI SAAT INPUT FOKUS */
         input:focus, select:focus { transform: translate(2px, 2px); box-shadow: var(--neo-shadow-hover); background: var(--focus-bg); color: #000; }
         input::placeholder { color: #7a8288; font-weight: 600; }
-        
         input[type="file"] { padding: 12px; padding-left: 12px; background: #dfe4ea; font-size: 0.85rem; cursor: pointer; border: 3px dashed #1e272e; box-shadow: none; }
         input[type="file"]:focus { transform: none; box-shadow: none; border-color: var(--primary); background: var(--hover-cyan); }
-
         .microcopy { display: block; font-size: 0.75rem; color: #57606f; margin-top: 8px; font-weight: 600; line-height: 1.3; }
-
         .bank-group-box { background: #f1f2f6; border: var(--neo-border); padding: 25px 20px 10px 20px; border-radius: 8px; margin-bottom: 25px; margin-top: 15px; position: relative; box-shadow: var(--neo-shadow-sm); }
         .bank-group-title { position: absolute; top: -14px; left: 15px; background: var(--primary); border: 2px solid #000; padding: 4px 12px; color: #fff; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; box-shadow: 2px 2px 0px #000; }
-
         .form-divider { margin: 30px 0 20px 0; border-top: 3px solid #1e272e; position: relative; }
         .form-divider span { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); border: 2px solid #000; padding: 4px 15px; color: #fff; font-size: 0.8rem; font-weight: 900; box-shadow: 2px 2px 0px #000; white-space: nowrap; }
-
         #previewContainer { display: none; margin-top: 15px; text-align: center; border: var(--neo-border); padding: 15px; background: #fff; border-radius: 8px; box-shadow: var(--neo-shadow-sm); }
         #imgPreview { max-width: 100%; max-height: 200px; display: block; margin: 0 auto; border: 2px solid #000; }
-
         .admin-float-btn { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: var(--text-main); border: 3px solid #fff; border-radius: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; box-shadow: 4px 4px 0px var(--accent); transition: 0.1s; }
         .admin-float-btn:hover { background: var(--hover-cyan); border-color: #000; }
         .admin-float-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--accent); }
         .admin-float-btn svg { width: 26px; height: 26px; fill: #fff; }
         .admin-float-btn:hover svg { fill: #000; }
-
         #adminPanel { display: none; border: var(--neo-border); background: var(--bg-card); padding: 25px; border-radius: 12px; margin-top: 30px; box-shadow: var(--neo-shadow); }
         .admin-stats { display: flex; justify-content: space-between; align-items: center; background: var(--primary); border: var(--neo-border); padding: 15px; margin-bottom: 25px; font-weight: 900; font-size: 1rem; color: #fff; box-shadow: var(--neo-shadow-sm); }
         .stat-count { background: #fff; color: #000; border: 2px solid #000; padding: 4px 12px; font-size: 1.1rem; box-shadow: 2px 2px 0px #000; }
-        
         .reports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; align-items: start; }
         .report-item { background: #f1f2f6; border: var(--neo-border); padding: 20px; border-radius: 0; color: var(--text-main); box-shadow: var(--neo-shadow-sm); display: flex; flex-direction: column; height: 100%; transition: 0.2s; }
         .report-item:hover { background: #dff9fb; box-shadow: 8px 8px 0px #1e272e; transform: translate(-2px, -2px); }
-        
         .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 12px; }
         .bank-info-box-admin { background: #fff; padding: 15px; border: var(--neo-border); margin: 15px 0; text-align: center; box-shadow: 2px 2px 0px #000; }
         .bank-info-box-admin .bank-title { font-size: 0.8rem; color: var(--text-main); font-weight: 900; text-transform: uppercase; margin-bottom: 5px; background: var(--bg-body); display: inline-block; padding: 2px 10px; border: 1px solid #000; }
         .bank-info-box-admin .bank-number { font-size: 1.3rem; font-weight: 900; color: var(--primary); margin-top: 5px; }
         .bank-info-box-admin .bank-name { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-top: 3px; }
-        
         .admin-thumb-container { display: flex; align-items: center; gap: 15px; background: #fff; padding: 10px; border: var(--neo-border); box-shadow: 2px 2px 0px #000; margin-bottom: 15px; }
         .preview-img-admin { width: 80px; height: 80px; object-fit: cover; border: 2px solid #000; cursor: zoom-in; }
-        
-        /* NOTIFICATIONS & LIGHTBOX */
         .notif-overlay, .lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 11000; justify-content: center; align-items: center; }
         .lightbox-overlay { z-index: 12000; cursor: zoom-out; padding: 20px; }
         .lightbox-overlay img { max-width: 100%; max-height: 90vh; border: 4px solid #fff; box-shadow: 10px 10px 0px rgba(255,255,255,0.2); object-fit: contain; }
-        
         .notif-box { background: var(--bg-card); border: 4px solid #000; box-shadow: 15px 15px 0px #000; padding: 35px 25px; width: 90%; max-width: 350px; text-align: center; transform: scale(0.9); opacity: 0; transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--text-main); }
         .notif-box.show { transform: scale(1); opacity: 1; }
         .notif-icon { font-size: 4rem; margin-bottom: 15px; display: block; filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); }
         .notif-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; display: block; text-transform: uppercase; }
         .notif-message { font-size: 1rem; color: #2f3640; margin-bottom: 25px; display: block; font-weight: 700; line-height: 1.4; }
-        
         .loading-bar-wrapper { width: 100%; height: 12px; background: #dfe4ea; border: 2px solid #000; margin-top: 20px; overflow: hidden; position: relative; }
         .loading-bar-modal { width: 40%; height: 100%; background: var(--primary); border-right: 2px solid #000; animation: moveBar 0.8s linear infinite alternate; }
         @keyframes moveBar { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
-
-        /* --- STYLING PATTERN LOCK --- */
         #patternLockModal .notif-box { padding: 40px 20px; border-color: var(--accent); }
         .pattern-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; position: relative; width: 250px; height: 250px; margin: 0 auto; touch-action: none; }
         .pattern-dot { width: 20px; height: 20px; background: #fff; border: 4px solid #000; border-radius: 50%; margin: auto; position: relative; z-index: 2; transition: 0.1s; box-shadow: 2px 2px 0px #000; }
@@ -414,7 +344,6 @@
     </div>
 
     <script>
-        // --- LOGIKA DRAGGABLE STICKERS ---
         const stickers = document.querySelectorAll('.draggable-sticker');
         let activeSticker = null;
         let startX, startY, initialLeft, initialTop;
@@ -432,19 +361,13 @@
         function dragStart(e) {
             activeSticker = e.target.closest('.draggable-sticker');
             if (!activeSticker) return;
-            
-            // Bikin stiker yang diklik ada di urutan paling depan
             stickers.forEach(s => s.style.zIndex = 50);
             activeSticker.style.zIndex = 100;
-            
             if (e.type === "touchstart") {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
+                startX = e.touches[0].clientX; startY = e.touches[0].clientY;
             } else {
-                startX = e.clientX;
-                startY = e.clientY;
+                startX = e.clientX; startY = e.clientY;
             }
-
             initialLeft = activeSticker.offsetLeft;
             initialTop = activeSticker.offsetTop;
         }
@@ -452,68 +375,44 @@
         function drag(e) {
             if (!activeSticker) return;
             e.preventDefault();
-
             let currentX, currentY;
             if (e.type === "touchmove") {
-                currentX = e.touches[0].clientX;
-                currentY = e.touches[0].clientY;
+                currentX = e.touches[0].clientX; currentY = e.touches[0].clientY;
             } else {
-                currentX = e.clientX;
-                currentY = e.clientY;
+                currentX = e.clientX; currentY = e.clientY;
             }
-
             let dx = currentX - startX;
             let dy = currentY - startY;
-
             activeSticker.style.left = `${initialLeft + dx}px`;
             activeSticker.style.top = `${initialTop + dy}px`;
         }
 
-        function dragEnd() {
-            if (!activeSticker) return;
-            activeSticker = null;
-        }
+        function dragEnd() { if (!activeSticker) return; activeSticker = null; }
 
-        // --- SISTEM AUDIO 8-BIT (Web Audio API) ---
         let audioCtx;
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
         function play8BitSound(frequency, type, duration, volume) {
             initAudio(); 
             if (!audioCtx) return;
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            oscillator.type = type;
-            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            oscillator.type = type; oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
             gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + duration);
+            oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+            oscillator.start(); oscillator.stop(audioCtx.currentTime + duration);
         }
 
         const sound = {
             click: () => play8BitSound(600, 'square', 0.1, 0.1), 
-            cair: () => { 
-                play8BitSound(500, 'square', 0.1, 0.1);
-                setTimeout(() => play8BitSound(800, 'square', 0.1, 0.1), 50);
-            },
-            glitch: () => { 
-                play8BitSound(150, 'square', 0.05, 0.1);
-                setTimeout(() => play8BitSound(100, 'square', 0.08, 0.1), 40);
-            },
+            cair: () => { play8BitSound(500, 'square', 0.1, 0.1); setTimeout(() => play8BitSound(800, 'square', 0.1, 0.1), 50); },
+            glitch: () => { play8BitSound(150, 'square', 0.05, 0.1); setTimeout(() => play8BitSound(100, 'square', 0.08, 0.1), 40); },
             pop: () => play8BitSound(900, 'square', 0.05, 0.05), 
             open: () => play8BitSound(400, 'square', 0.2, 0.1) 
         };
 
         document.addEventListener('click', initAudio, { once: true });
 
-        // --- UI FUNCTIONS ---
         function openFormModal() { sound.open(); document.getElementById('formModal').classList.add('active'); }
         function closeFormModal() { sound.glitch(); document.getElementById('formModal').classList.remove('active'); }
         document.getElementById('formModal').addEventListener('click', function(e) { if (e.target === this) closeFormModal(); });
@@ -523,8 +422,13 @@
 
         const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dsuk4te3f/image/upload";
         const CLOUDINARY_PRESET = "xv0tqoe8";
+        
         const BIN_PENDING_ID = "6981f1e5d0ea881f409d919f";
         const API_KEY_PENDING = "$2a$10$mx8berYVnQxRc7ATeB018Orxl1veAxJt/HhcqGd2CS6kSzL4yPg82";
+        
+        const BIN_REFERRAL_ID = "6967465dd0ea881f406adee4";
+        const API_KEY_REFERRAL = "$2a$10$4v5UzmjJBEf7T6RUlR7CfeJERCrf/waXNcO7pxUk3OYGOzBNLJ7Fy";
+        
         const SUPABASE_URL = "https://bllzoxlrqzzfkcnyhyad.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsbHpveGxycXp6ZmtjbnloeWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NTk0NzgsImV4cCI6MjA4NjEzNTQ3OH0.I1BVt8lJJKYXWOX-xBiOwiq3D3-PEN7hEHYJw-VKe9c";
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -536,126 +440,58 @@
 
         function showNotif(title, message, icon="👍", shouldReload=false) {
             if (icon === "❌" || icon === "⚠️") sound.glitch(); else sound.cair();
-            document.getElementById('notifTitle').innerText = title;
-            document.getElementById('notifMsg').innerText = message;
-            document.getElementById('notifIcon').innerText = icon;
-            const overlay = document.getElementById('customNotif');
-            const box = document.getElementById('notifBox');
-            overlay.style.display = 'flex';
-            setTimeout(() => { box.classList.add('show'); }, 10);
-            reloadOnClose = shouldReload;
+            document.getElementById('notifTitle').innerText = title; document.getElementById('notifMsg').innerText = message; document.getElementById('notifIcon').innerText = icon;
+            const overlay = document.getElementById('customNotif'); const box = document.getElementById('notifBox');
+            overlay.style.display = 'flex'; setTimeout(() => { box.classList.add('show'); }, 10); reloadOnClose = shouldReload;
         }
 
         function closeNotif() {
-            sound.click();
-            const overlay = document.getElementById('customNotif');
-            const box = document.getElementById('notifBox');
-            box.classList.remove('show');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                if (reloadOnClose) location.reload();
-            }, 300);
+            sound.click(); const overlay = document.getElementById('customNotif'); const box = document.getElementById('notifBox');
+            box.classList.remove('show'); setTimeout(() => { overlay.style.display = 'none'; if (reloadOnClose) location.reload(); }, 300);
         }
 
         document.getElementById('buktiImg').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const previewContainer = document.getElementById('previewContainer');
-            const imgPreview = document.getElementById('imgPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imgPreview.src = e.target.result;
-                    previewContainer.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            } else {
-                imgPreview.src = '';
-                previewContainer.style.display = 'none';
-            }
+            const file = event.target.files[0]; const previewContainer = document.getElementById('previewContainer'); const imgPreview = document.getElementById('imgPreview');
+            if (file) { const reader = new FileReader(); reader.onload = function(e) { imgPreview.src = e.target.result; previewContainer.style.display = 'block'; }; reader.readAsDataURL(file); } 
+            else { imgPreview.src = ''; previewContainer.style.display = 'none'; }
         });
 
         async function submitReport() {
             sound.click();
-            const email = document.getElementById('email').value.toLowerCase().trim(); 
-            const telepon = document.getElementById('telepon').value.trim();
-            const status = document.getElementById('status').value;
-            const inviter = document.getElementById('inviter').value.trim(); 
-            const fileInput = document.getElementById('buktiImg');
-            const bankName = document.getElementById('bankName').value.trim();
-            const accName = document.getElementById('accName').value.trim();
-            const accNumber = document.getElementById('accNumber').value.trim();
+            const email = document.getElementById('email').value.toLowerCase().trim(); const telepon = document.getElementById('telepon').value.trim(); const status = document.getElementById('status').value;
+            const inviter = document.getElementById('inviter').value.trim(); const fileInput = document.getElementById('buktiImg'); const bankName = document.getElementById('bankName').value.trim();
+            const accName = document.getElementById('accName').value.trim(); const accNumber = document.getElementById('accNumber').value.trim();
 
             if (!email || !telepon || fileInput.files.length === 0) { showNotif("MOHON LENGKAPI", "Isi form wajib (*) & upload bukti!", "⚠️"); return; }
             if (!bankName || !accName || !accNumber) { showNotif("DATA BANK KOSONG", "Lengkapi rekening biar cuan bisa mendarat.", "💳"); return; }
 
-            const btn = document.getElementById('btnSubmit');
-            btn.disabled = true;
-            btn.innerHTML = "MEMPROSES...";
-            showLoading();
+            const btn = document.getElementById('btnSubmit'); btn.disabled = true; btn.innerHTML = "MEMPROSES..."; showLoading();
 
             try {
-                const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
-                formData.append('upload_preset', CLOUDINARY_PRESET);
-
-                const imgRes = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
-                const imgData = await imgRes.json();
-                const imgUrl = imgData.secure_url;
-
-                const fullTimestamp = new Date().toISOString();
-                const reportId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const formData = new FormData(); formData.append('file', fileInput.files[0]); formData.append('upload_preset', CLOUDINARY_PRESET);
+                const imgRes = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData }); const imgData = await imgRes.json(); const imgUrl = imgData.secure_url;
+                const fullTimestamp = new Date().toISOString(); const reportId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 
-                const newReport = {
-                    id: reportId, email: email, telepon: telepon, status: status, 
-                    inviter: inviter, tanggal: fullTimestamp, bukti_url: imgUrl,
-                    bank_name: bankName, acc_name: accName, acc_number: accNumber
-                };
+                const newReport = { id: reportId, email: email, telepon: telepon, status: status, inviter: inviter, tanggal: fullTimestamp, bukti_url: imgUrl, bank_name: bankName, acc_name: accName, acc_number: accNumber };
 
                 const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, { headers: { 'X-Master-Key': API_KEY_PENDING } });
-                const getData = await getRes.json();
-                let currentUsers = getData.record.users || [];
-
+                const getData = await getRes.json(); let currentUsers = getData.record.users || [];
                 currentUsers.push(newReport);
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING },
-                    body: JSON.stringify({ users: currentUsers })
-                });
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING }, body: JSON.stringify({ users: currentUsers }) });
 
-                hideLoading();
-                closeFormModal(); 
-                showNotif("TERKIRIM!", "Data masuk antrian. Tunggu info selanjutnya!", "🚀", true);
-
-            } catch (error) {
-                console.error(error);
-                hideLoading();
-                showNotif("ERROR JARINGAN", "Gagal: " + error.message, "❌");
-                btn.disabled = false;
-                btn.innerHTML = "KIRIM LAPORAN";
-            }
+                hideLoading(); closeFormModal(); showNotif("TERKIRIM!", "Data masuk antrian. Tunggu info selanjutnya!", "🚀", true);
+            } catch (error) { console.error(error); hideLoading(); showNotif("ERROR JARINGAN", "Gagal: " + error.message, "❌"); btn.disabled = false; btn.innerHTML = "KIRIM LAPORAN"; }
         }
 
-        // --- SISTEM PATTERN LOCK ---
-        const patternGrid = document.getElementById('patternGrid');
-        const dots = document.querySelectorAll('.pattern-dot');
-        const svg = document.getElementById('patternSvg');
-        let currentPattern = [];
-        let isDrawingPattern = false;
-        let currX = 0, currY = 0;
-        
-        const TARGET_PATTERN = '4569871'; 
+        const patternGrid = document.getElementById('patternGrid'); const dots = document.querySelectorAll('.pattern-dot'); const svg = document.getElementById('patternSvg');
+        let currentPattern = []; let isDrawingPattern = false; let currX = 0, currY = 0; const TARGET_PATTERN = '4569871'; 
 
-        function getDotCenter(dot) {
-            const gridRect = patternGrid.getBoundingClientRect();
-            const dotRect = dot.getBoundingClientRect();
-            return { x: dotRect.left - gridRect.left + dotRect.width / 2, y: dotRect.top - gridRect.top + dotRect.height / 2 };
-        }
+        function getDotCenter(dot) { const gridRect = patternGrid.getBoundingClientRect(); const dotRect = dot.getBoundingClientRect(); return { x: dotRect.left - gridRect.left + dotRect.width / 2, y: dotRect.top - gridRect.top + dotRect.height / 2 }; }
 
         function drawLines() {
             let html = '';
             for(let i=0; i<currentPattern.length-1; i++) {
-                let p1 = getDotCenter(dots[currentPattern[i]-1]);
-                let p2 = getDotCenter(dots[currentPattern[i+1]-1]);
+                let p1 = getDotCenter(dots[currentPattern[i]-1]); let p2 = getDotCenter(dots[currentPattern[i+1]-1]);
                 html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#1e272e" stroke-width="8" stroke-linecap="square"/>`;
             }
             if(isDrawingPattern && currentPattern.length > 0) {
@@ -666,212 +502,65 @@
         }
 
         function handleInputStart(e) {
-            if(e.target.closest('.btn-neo')) return; 
-            e.preventDefault();
-            currentPattern = [];
-            isDrawingPattern = true;
-            dots.forEach(d => { d.classList.remove('active', 'error'); });
-            document.getElementById('patternMsg').innerText = "Lepaskan untuk konfirmasi";
-            handleInputMove(e);
+            if(e.target.closest('.btn-neo')) return; e.preventDefault();
+            currentPattern = []; isDrawingPattern = true; dots.forEach(d => { d.classList.remove('active', 'error'); }); document.getElementById('patternMsg').innerText = "Lepaskan untuk konfirmasi"; handleInputMove(e);
         }
 
         function handleInputMove(e) {
-            if(!isDrawingPattern) return;
-            e.preventDefault();
-            
-            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            const gridRect = patternGrid.getBoundingClientRect();
-            currX = clientX - gridRect.left;
-            currY = clientY - gridRect.top;
-
+            if(!isDrawingPattern) return; e.preventDefault();
+            let clientX = e.touches ? e.touches[0].clientX : e.clientX; let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const gridRect = patternGrid.getBoundingClientRect(); currX = clientX - gridRect.left; currY = clientY - gridRect.top;
             dots.forEach(dot => {
                 let val = parseInt(dot.getAttribute('data-val'));
                 if(!currentPattern.includes(val)) {
-                    let center = getDotCenter(dot);
-                    let dist = Math.hypot(currX - center.x, currY - center.y);
-                    if(dist < 30) { 
-                        currentPattern.push(val);
-                        dot.classList.add('active');
-                        sound.pop();
-                        if (navigator.vibrate) navigator.vibrate(20);
-                    }
+                    let center = getDotCenter(dot); let dist = Math.hypot(currX - center.x, currY - center.y);
+                    if(dist < 30) { currentPattern.push(val); dot.classList.add('active'); sound.pop(); if (navigator.vibrate) navigator.vibrate(20); }
                 }
-            });
-            drawLines();
+            }); drawLines();
         }
 
         function handleInputEnd(e) {
-            if(!isDrawingPattern) return;
-            isDrawingPattern = false;
-            drawLines(); 
-            
+            if(!isDrawingPattern) return; isDrawingPattern = false; drawLines(); 
             if(currentPattern.join('') === TARGET_PATTERN) {
-                sound.cair();
-                document.getElementById('patternMsg').innerText = "POLA BENAR! MEMBUKA...";
-                setTimeout(() => { closePatternLock(); openAdminPanelData(); }, 400);
+                sound.cair(); document.getElementById('patternMsg').innerText = "POLA BENAR! MEMBUKA..."; setTimeout(() => { closePatternLock(); openAdminPanelData(); }, 400);
             } else if (currentPattern.length > 0) {
-                sound.glitch();
-                document.getElementById('patternMsg').innerText = "POLA SALAH!";
-                document.getElementById('patternMsg').style.color = "var(--secondary)";
-                dots.forEach(d => {
-                    if(currentPattern.includes(parseInt(d.getAttribute('data-val')))) {
-                        d.classList.add('error');
-                        d.classList.remove('active');
-                    }
-                });
+                sound.glitch(); document.getElementById('patternMsg').innerText = "POLA SALAH!"; document.getElementById('patternMsg').style.color = "var(--secondary)";
+                dots.forEach(d => { if(currentPattern.includes(parseInt(d.getAttribute('data-val')))) { d.classList.add('error'); d.classList.remove('active'); } });
                 svg.innerHTML = svg.innerHTML.replace(/stroke="#1e272e"/g, 'stroke="var(--secondary)"');
-                setTimeout(() => {
-                    currentPattern = [];
-                    drawLines();
-                    dots.forEach(d => { d.classList.remove('error'); });
-                    document.getElementById('patternMsg').innerText = 'Tarik garis pola rahasia';
-                    document.getElementById('patternMsg').style.color = "var(--text-main)";
-                }, 1000);
+                setTimeout(() => { currentPattern = []; drawLines(); dots.forEach(d => { d.classList.remove('error'); }); document.getElementById('patternMsg').innerText = 'Tarik garis pola rahasia'; document.getElementById('patternMsg').style.color = "var(--text-main)"; }, 1000);
             }
         }
 
-        patternGrid.addEventListener('mousedown', handleInputStart);
-        patternGrid.addEventListener('touchstart', handleInputStart, {passive: false});
-        document.addEventListener('mousemove', handleInputMove, {passive: false});
-        document.addEventListener('touchmove', handleInputMove, {passive: false});
-        document.addEventListener('mouseup', handleInputEnd);
-        document.addEventListener('touchend', handleInputEnd);
+        patternGrid.addEventListener('mousedown', handleInputStart); patternGrid.addEventListener('touchstart', handleInputStart, {passive: false}); document.addEventListener('mousemove', handleInputMove, {passive: false}); document.addEventListener('touchmove', handleInputMove, {passive: false}); document.addEventListener('mouseup', handleInputEnd); document.addEventListener('touchend', handleInputEnd);
 
         function toggleAdmin() {
-            sound.click();
-            const panel = document.getElementById('adminPanel');
-            const mainContainer = document.getElementById('mainContainer');
-            const ctaContainer = document.querySelector('.cta-container');
-            const cardExample = document.querySelector('.card-example');
-            
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-                ctaContainer.style.display = 'flex';
-                cardExample.style.display = 'block';
-                mainContainer.classList.remove('admin-active'); 
-                return;
-            }
-            
-            document.getElementById('patternLockModal').style.display = 'flex';
-            setTimeout(() => { document.getElementById('patternBox').classList.add('show'); }, 10);
-            
-            currentPattern = [];
-            drawLines();
-            dots.forEach(d => d.classList.remove('active', 'error'));
-            document.getElementById('patternMsg').innerText = 'Tarik garis pola rahasia';
-            document.getElementById('patternMsg').style.color = 'var(--text-main)';
+            sound.click(); const panel = document.getElementById('adminPanel'); const mainContainer = document.getElementById('mainContainer'); const ctaContainer = document.querySelector('.cta-container'); const cardExample = document.querySelector('.card-example');
+            if (panel.style.display === 'block') { panel.style.display = 'none'; ctaContainer.style.display = 'flex'; cardExample.style.display = 'block'; mainContainer.classList.remove('admin-active'); return; }
+            document.getElementById('patternLockModal').style.display = 'flex'; setTimeout(() => { document.getElementById('patternBox').classList.add('show'); }, 10);
+            currentPattern = []; drawLines(); dots.forEach(d => d.classList.remove('active', 'error')); document.getElementById('patternMsg').innerText = 'Tarik garis pola rahasia'; document.getElementById('patternMsg').style.color = 'var(--text-main)';
         }
 
-        function closePatternLock() {
-            sound.glitch();
-            document.getElementById('patternBox').classList.remove('show');
-            setTimeout(() => { document.getElementById('patternLockModal').style.display = 'none'; }, 300);
-        }
+        function closePatternLock() { sound.glitch(); document.getElementById('patternBox').classList.remove('show'); setTimeout(() => { document.getElementById('patternLockModal').style.display = 'none'; }, 300); }
 
         function openAdminPanelData() {
-            sound.open();
-            const panel = document.getElementById('adminPanel');
-            const mainContainer = document.getElementById('mainContainer');
-            const ctaContainer = document.querySelector('.cta-container');
-            const cardExample = document.querySelector('.card-example');
-
-            panel.style.display = 'block';
-            ctaContainer.style.display = 'none'; 
-            cardExample.style.display = 'none';
-            mainContainer.classList.add('admin-active'); 
-            loadPendingReports();
+            sound.open(); const panel = document.getElementById('adminPanel'); const mainContainer = document.getElementById('mainContainer'); const ctaContainer = document.querySelector('.cta-container'); const cardExample = document.querySelector('.card-example');
+            panel.style.display = 'block'; ctaContainer.style.display = 'none'; cardExample.style.display = 'none'; mainContainer.classList.add('admin-active'); loadPendingReports();
         }
 
         async function loadPendingReports() {
-            sound.click(); 
-            const content = document.getElementById('adminContent');
-            const countBadge = document.getElementById('requestCount');
-            content.innerHTML = '<p style="color:var(--text-main); font-weight:900; text-align:center;">MENGAMBIL DATA...</p>';
-
+            sound.click(); const content = document.getElementById('adminContent'); const countBadge = document.getElementById('requestCount'); content.innerHTML = '<p style="color:var(--text-main); font-weight:900; text-align:center;">MENGAMBIL DATA...</p>';
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, { headers: { 'X-Master-Key': API_KEY_PENDING } });
-                const data = await res.json();
-                const users = data.record.users || [];
-                countBadge.innerText = users.length;
-
-                if (users.length === 0) {
-                    content.innerHTML = "<p style='text-align:center; padding: 30px; font-weight:900; font-size: 1.2rem; border: 4px dashed #000;'>TIDAK ADA ANTRIAN 💤</p>";
-                    return;
-                }
-
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}/latest`, { headers: { 'X-Master-Key': API_KEY_PENDING } }); const data = await res.json(); const users = data.record.users || []; countBadge.innerText = users.length;
+                if (users.length === 0) { content.innerHTML = "<p style='text-align:center; padding: 30px; font-weight:900; font-size: 1.2rem; border: 4px dashed #000;'>TIDAK ADA ANTRIAN 💤</p>"; return; }
                 let html = '<div class="reports-grid">';
                 users.forEach((u, index) => {
-                    const isNew = (u.status === 'New Acc');
-                    const badgeBg = isNew ? 'var(--primary)' : 'var(--accent)'; 
-                    const inviterCode = u.inviter ? `<b>${u.inviter}</b>` : '-';
-                    
-                    let displayTime = u.tanggal;
-                    try {
-                        const dateObj = new Date(u.tanggal);
-                        if(!isNaN(dateObj)) {
-                            const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' };
-                            displayTime = new Intl.DateTimeFormat('id-ID', options).format(dateObj) + ' WIB';
-                        }
-                    } catch(e) {}
-
-                    const bankBoxHTML = u.bank_name ? `
-                        <div class="bank-info-box-admin">
-                            <div class="bank-title">Tujuan Transfer</div>
-                            <div class="bank-number">${u.bank_name} - ${u.acc_number}</div>
-                            <div class="bank-name">a/n ${u.acc_name}</div>
-                        </div>
-                    ` : '<div class="bank-info-box-admin" style="background:#ffcccc;"><div class="bank-title" style="background:var(--secondary); color:#fff;">DATA BANK KOSONG!</div></div>';
-
-                    html += `
-                        <div class="report-item">
-                            <div class="report-header">
-                                <div style="font-size: 0.85rem; font-weight:900;">⏱️ ${displayTime}</div>
-                                <span style="background:${badgeBg}; color:#fff; padding:4px 12px; font-size:0.8rem; font-weight:900; border: 2px solid #000; box-shadow: 2px 2px 0px #000; text-transform:uppercase;">${u.status}</span>
-                            </div>
-                            
-                            <div style="margin-bottom:12px;">
-                                <div style="font-size:0.8rem; text-transform:uppercase; font-weight:900;">Email Akun</div>
-                                <div style="font-size:1.15rem; font-weight:900; word-break: break-all;">${u.email}</div>
-                            </div>
-                            
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px; background: #fff; padding: 10px; border: 2px solid #000;">
-                                <div>
-                                    <div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">WhatsApp</div>
-                                    <div style="font-weight:900; font-size:1rem;">${u.telepon}</div>
-                                </div>
-                                <div style="text-align:right;">
-                                    <div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">Inviter</div>
-                                    <div style="font-size:1rem; font-weight:900;">${inviterCode}</div>
-                                </div>
-                            </div>
-                            
-                            ${bankBoxHTML}
-                            
-                            <div class="admin-thumb-container">
-                                <img src="${u.bukti_url}" class="preview-img-admin" alt="Bukti" onclick="openLightbox('${u.bukti_url}')" title="Klik untuk perbesar">
-                                <div style="font-size:0.85rem; font-weight:800; line-height:1.4;">
-                                    <span style="text-transform:uppercase; background:var(--bg-body); padding:2px 5px; border:1px solid #000;">BUKTI TRANSFER</span><br>
-                                    <span style="font-size: 0.75rem;">Klik gambar buat nge-zoom</span>
-                                </div>
-                            </div>
-                            
-                            <div style="display:flex; gap:15px; margin-top:auto; padding-top:20px;">
-                                <button class="btn-neo" onclick="processAcc(${index})" style="background:var(--primary); padding:12px; font-size: 1rem;">ACC ✔️</button>
-                                <button class="btn-neo" onclick="processTolak(${index})" style="background:var(--secondary); padding:12px; font-size: 1rem;">TOLAK ❌</button>
-                            </div>
-                        </div>
-                    `;
+                    const isNew = (u.status === 'New Acc'); const badgeBg = isNew ? 'var(--primary)' : 'var(--accent)'; const inviterCode = u.inviter ? `<b>${u.inviter}</b>` : '-';
+                    let displayTime = u.tanggal; try { const dateObj = new Date(u.tanggal); if(!isNaN(dateObj)) { const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' }; displayTime = new Intl.DateTimeFormat('id-ID', options).format(dateObj) + ' WIB'; } } catch(e) {}
+                    const bankBoxHTML = u.bank_name ? `<div class="bank-info-box-admin"><div class="bank-title">Tujuan Transfer</div><div class="bank-number">${u.bank_name} - ${u.acc_number}</div><div class="bank-name">a/n ${u.acc_name}</div></div>` : '<div class="bank-info-box-admin" style="background:#ffcccc;"><div class="bank-title" style="background:var(--secondary); color:#fff;">DATA BANK KOSONG!</div></div>';
+                    html += `<div class="report-item"><div class="report-header"><div style="font-size: 0.85rem; font-weight:900;">⏱️ ${displayTime}</div><span style="background:${badgeBg}; color:#fff; padding:4px 12px; font-size:0.8rem; font-weight:900; border: 2px solid #000; box-shadow: 2px 2px 0px #000; text-transform:uppercase;">${u.status}</span></div><div style="margin-bottom:12px;"><div style="font-size:0.8rem; text-transform:uppercase; font-weight:900;">Email Akun</div><div style="font-size:1.15rem; font-weight:900; word-break: break-all;">${u.email}</div></div><div style="display:flex; justify-content:space-between; margin-bottom:10px; background: #fff; padding: 10px; border: 2px solid #000;"><div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">WhatsApp</div><div style="font-weight:900; font-size:1rem;">${u.telepon}</div></div><div style="text-align:right;"><div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">Inviter</div><div style="font-size:1rem; font-weight:900;">${inviterCode}</div></div></div>${bankBoxHTML}<div class="admin-thumb-container"><img src="${u.bukti_url}" class="preview-img-admin" alt="Bukti" onclick="openLightbox('${u.bukti_url}')" title="Klik untuk perbesar"><div style="font-size:0.85rem; font-weight:800; line-height:1.4;"><span style="text-transform:uppercase; background:var(--bg-body); padding:2px 5px; border:1px solid #000;">BUKTI TRANSFER</span><br><span style="font-size: 0.75rem;">Klik gambar buat nge-zoom</span></div></div><div style="display:flex; gap:15px; margin-top:auto; padding-top:20px;"><button class="btn-neo" onclick="processAcc(${index})" style="background:var(--primary); padding:12px; font-size: 1rem;">ACC ✔️</button><button class="btn-neo" onclick="processTolak(${index})" style="background:var(--secondary); padding:12px; font-size: 1rem;">TOLAK ❌</button></div></div>`;
                 });
-                
-                html += '</div>';
-                content.innerHTML = html;
-                window.pendingUsers = users; 
-            } catch (e) {
-                content.innerHTML = "<p style='color:var(--secondary); font-weight:900; text-align:center;'>GAGAL TARIK DATA.</p>";
-                countBadge.innerText = "0";
-            }
+                html += '</div>'; content.innerHTML = html; window.pendingUsers = users; 
+            } catch (e) { content.innerHTML = "<p style='color:var(--secondary); font-weight:900; text-align:center;'>GAGAL TARIK DATA.</p>"; countBadge.innerText = "0"; }
         }
 
         async function processAcc(index) {
@@ -881,48 +570,67 @@
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             const emailNormal = userToAcc.email.toLowerCase().trim();
+            const inviterCode = userToAcc.inviter ? userToAcc.inviter.trim() : ""; 
 
             try {
+                // 1. Simpan ke Supabase
                 const { error } = await db.from(NAMA_TABEL_SUPABASE).upsert([
-                    { 
-                        email: emailNormal, whatsapp: userToAcc.telepon, status: userToAcc.status, 
-                        tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, 
-                        acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number 
-                    }
+                    { email: emailNormal, whatsapp: userToAcc.telepon, status: userToAcc.status, tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number }
                 ], { onConflict: 'email' });
 
-                if (error) throw new Error("Gagal DB: " + error.message);
+                if (error) throw new Error("Gagal DB Supabase: " + error.message);
+
+                // 2. Simpan ke JSONBin Referral (Jika ada kode inviter)
+                if (inviterCode !== "") {
+                    try {
+                        const refRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}/latest`, { 
+                            headers: { 'X-Master-Key': API_KEY_REFERRAL } 
+                        });
+                        
+                        if (!refRes.ok) throw new Error(`HTTP Error: ${refRes.status}`);
+                        const refData = await refRes.json();
+                        let existingRecord = refData.record || {}; 
+                        
+                        // FIX UTAMA: Pakai laci 'users' dengan properti 'code' & 'email'
+                        let currentUsers = existingRecord.users || [];
+
+                        currentUsers.push({
+                            code: inviterCode,
+                            email: emailNormal
+                        });
+
+                        const updatedRecord = { ...existingRecord, users: currentUsers };
+
+                        const putRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_REFERRAL },
+                            body: JSON.stringify(updatedRecord)
+                        });
+                        
+                        if (!putRes.ok) throw new Error("Gagal nulis ke Bin Referral.");
+                        console.log("Data referral sukses masuk pakai laci users!");
+                    } catch (refError) {
+                        console.error("Gagal simpan ke JSONBin Referral:", refError);
+                        alert("Peringatan: Gagal simpan catatan referral! Cek console."); 
+                    }
+                }
+
+                // 3. Hapus antrian lokal & notif
                 await removeLocalAndServer(index);
-                showNotif("SUKSES ACC", "Data aman di Database.", "💾"); 
+                const notifMsg = inviterCode ? "Data aman di Supabase & Catatan Referral!" : "Data aman di Supabase.";
+                showNotif("SUKSES ACC", notifMsg, "💾"); 
                 loadPendingReports(); 
-            } catch (e) { 
-                console.error(e);
-                showNotif("ERROR DB", e.message, "❌"); 
-            }
+            } catch (e) { console.error(e); showNotif("ERROR", e.message, "❌"); }
         }
 
         async function processTolak(index) {
-            sound.glitch(); 
-            const user = window.pendingUsers[index];
-            if (!confirm("Tolak laporan ini?")) return;
-            let hp = user.telepon.replace(/\D/g, ''); 
-            if (hp.startsWith('0')) hp = '62' + hp.slice(1);
-            else if (!hp.startsWith('62')) hp = '62' + hp; 
-            
+            sound.glitch(); const user = window.pendingUsers[index]; if (!confirm("Tolak laporan ini?")) return;
+            let hp = user.telepon.replace(/\D/g, ''); if (hp.startsWith('0')) hp = '62' + hp.slice(1); else if (!hp.startsWith('62')) hp = '62' + hp; 
             const pesan = encodeURIComponent("Halo, laporan Success Rental ditolak karena bukti kurang valid/lengkap. Silakan cek rules dan re-submit ya kak.");
-            window.open(`https://wa.me/${hp}?text=${pesan}`, '_blank');
-            await removeLocalAndServer(index);
-            loadPendingReports();
+            window.open(`https://wa.me/${hp}?text=${pesan}`, '_blank'); await removeLocalAndServer(index); loadPendingReports();
         }
 
-        async function removeLocalAndServer(index) {
-            window.pendingUsers.splice(index, 1);
-            await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING },
-                body: JSON.stringify({ users: window.pendingUsers })
-            });
-        }
+        async function removeLocalAndServer(index) { window.pendingUsers.splice(index, 1); await fetch(`https://api.jsonbin.io/v3/b/${BIN_PENDING_ID}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_PENDING }, body: JSON.stringify({ users: window.pendingUsers }) }); }
     </script>
 </body>
 </html>
