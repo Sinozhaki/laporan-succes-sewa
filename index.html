@@ -232,7 +232,7 @@
             <p style="font-weight: 800; font-size: 0.9rem; margin-top: 0; margin-bottom: 15px;">
                 Wajib full chat & nominal terlihat jelas!
             </p>
-            <img src="contoh.png" alt="Contoh" class="example-img" onerror="this.style.display='none'; this.parentElement.innerHTML+='<p style=\'color:var(--secondary); font-size:1rem; font-weight:900; background: #fff; padding: 10px; border: 2px solid #000;\'>[GAMBAR CONTOH.PNG HILANG]</p>'">
+            <img src="contoh.png" alt="Contoh" class="example-img" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend', `<p style='color:var(--secondary); font-size:1rem; font-weight:900; background: #fff; padding: 10px; border: 2px solid #000;'>[GAMBAR CONTOH HILANG]</p>`)">
         </div>
 
         <div class="cta-container">
@@ -439,15 +439,14 @@
 
         let reloadOnClose = false;
 
-        // FITUR BARU: LOGIKA KUNCI KOLOM INVITER
         document.getElementById('status').addEventListener('change', function(e) {
             const inviterInput = document.getElementById('inviter');
             if (e.target.value === 'Unrestric') {
-                inviterInput.value = ''; // Kosongin isinya biar gak nyasar
-                inviterInput.disabled = true; // Kunci
+                inviterInput.value = '';
+                inviterInput.disabled = true;
                 inviterInput.placeholder = "Tidak tersedia untuk Unrestric";
             } else {
-                inviterInput.disabled = false; // Buka kunci
+                inviterInput.disabled = false;
                 inviterInput.placeholder = "Masukkan jika ada";
             }
         });
@@ -587,19 +586,15 @@
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             const emailNormal = userToAcc.email.toLowerCase().trim();
-            // FITUR BARU: AUTO UPPERCASE (Kapital Otomatis)
             const inviterCode = userToAcc.inviter ? userToAcc.inviter.trim().toUpperCase() : ""; 
 
             try {
-                // 1. Simpan ke Supabase
                 const { error } = await db.from(NAMA_TABEL_SUPABASE).upsert([
                     { email: emailNormal, whatsapp: userToAcc.telepon, status: userToAcc.status, tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number }
                 ], { onConflict: 'email' });
 
                 if (error) throw new Error("Gagal DB Supabase: " + error.message);
 
-                // 2. Simpan ke JSONBin Referral (Jika ada kode inviter & Status New Acc)
-                // Aku tambahin syarat status wajib New Acc biar makin aman sesuai request.
                 if (inviterCode !== "" && userToAcc.status === "New Acc") {
                     try {
                         const refRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}/latest`, { 
@@ -612,28 +607,34 @@
                         
                         let currentUsers = existingRecord.users || [];
 
-                        currentUsers.push({
-                            code: inviterCode,
-                            email: emailNormal
-                        });
+                        // Cek email pakai opsional chaining biar aman dari error undenified
+                        const isDuplicate = currentUsers.some(u => u?.email === emailNormal);
 
-                        const updatedRecord = { ...existingRecord, users: currentUsers };
+                        if (!isDuplicate) {
+                            currentUsers.push({
+                                code: inviterCode,
+                                email: emailNormal
+                            });
 
-                        const putRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_REFERRAL },
-                            body: JSON.stringify(updatedRecord)
-                        });
-                        
-                        if (!putRes.ok) throw new Error("Gagal nulis ke Bin Referral.");
-                        console.log("Data referral sukses masuk pakai laci users!");
+                            const updatedRecord = { ...existingRecord, users: currentUsers };
+
+                            const putRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_REFERRAL_ID}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_REFERRAL },
+                                body: JSON.stringify(updatedRecord)
+                            });
+                            
+                            if (!putRes.ok) throw new Error("Gagal nulis ke Bin Referral.");
+                            console.log("Data referral sukses masuk pakai laci users!");
+                        } else {
+                            console.log("Email sudah ada di data referral. Skip simpan duplikat.");
+                        }
                     } catch (refError) {
                         console.error("Gagal simpan ke JSONBin Referral:", refError);
                         alert("Peringatan: Gagal simpan catatan referral! Cek console."); 
                     }
                 }
 
-                // 3. Hapus antrian lokal & notif
                 await removeLocalAndServer(index);
                 const notifMsg = (inviterCode && userToAcc.status === "New Acc") ? "Data aman di Supabase & Catatan Referral!" : "Data aman di Supabase.";
                 showNotif("SUKSES ACC", notifMsg, "💾"); 
