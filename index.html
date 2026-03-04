@@ -53,9 +53,40 @@
         .example-badge { background: var(--text-main); color: #fff; padding: 8px 16px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; display: inline-block; border: 2px solid #fff; outline: 3px solid var(--text-main); margin-bottom: 15px; }
         .example-img { width: 100%; max-width: 200px; height: auto; border-radius: 8px; border: var(--neo-border); margin: 10px auto; display: block; box-shadow: var(--neo-shadow-sm); }
         .cta-container { display: flex; justify-content: center; margin: 40px 0; }
-        .btn-neo { background: var(--secondary); color: #fff; font-size: 1.2rem; font-weight: 900; padding: 18px 40px; border: var(--neo-border); border-radius: 8px; cursor: pointer; box-shadow: var(--neo-shadow); text-transform: uppercase; letter-spacing: 1px; width: 100%; max-width: 320px; transition: all 0.1s ease-in-out; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn-neo:hover { background: var(--hover-green); color: #000; }
-        .btn-neo:active { transform: translate(4px, 4px); box-shadow: var(--neo-shadow-hover); }
+        
+        /* TOMBOL COMIC ARCADE 3D DI SINI */
+        .btn-neo { 
+            background-color: var(--secondary); 
+            background-image: radial-gradient(#b33939 20%, transparent 20%), radial-gradient(#b33939 20%, transparent 20%); 
+            background-size: 12px 12px; 
+            background-position: 0 0, 6px 6px; 
+            color: #fff; 
+            font-size: 1.3rem; 
+            font-weight: 900; 
+            padding: 18px 40px; 
+            border: 4px solid #1e272e; 
+            border-radius: 0px; 
+            cursor: pointer; 
+            box-shadow: 8px 8px 0px #1e272e; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            width: 100%; 
+            max-width: 320px; 
+            transition: all 0.1s ease-in-out; 
+            display: flex; justify-content: center; align-items: center; gap: 10px; 
+            text-shadow: 3px 3px 0px #1e272e, -1px -1px 0 #1e272e, 1px -1px 0 #1e272e, -1px 1px 0 #1e272e, 1px 1px 0 #1e272e; 
+        }
+        .btn-neo:hover { 
+            background-color: var(--hover-green); 
+            background-image: radial-gradient(#218c74 20%, transparent 20%), radial-gradient(#218c74 20%, transparent 20%); 
+            color: #fff; 
+        }
+        .btn-neo:active { 
+            transform: translate(8px, 8px); 
+            box-shadow: 0px 0px 0px #1e272e; 
+        }
+        /* BATAS TOMBOL COMIC ARCADE 3D */
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 39, 46, 0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; padding: 20px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: var(--bg-card); width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; border-radius: 12px; padding: 30px 25px; border: var(--neo-border); box-shadow: 12px 12px 0px rgba(0,0,0,1); transform: translateY(-50px); opacity: 0; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -75,7 +106,6 @@
         input:focus, select:focus { transform: translate(2px, 2px); box-shadow: var(--neo-shadow-hover); background: var(--focus-bg); color: #000; }
         input::placeholder { color: #7a8288; font-weight: 600; }
         
-        /* EFEK INPUT DISABLED (TERKUNCI) */
         input:disabled { background: #dfe4ea; color: #7a8288; cursor: not-allowed; border-style: dashed; box-shadow: none; transform: none; }
 
         input[type="file"] { padding: 12px; padding-left: 12px; background: #dfe4ea; font-size: 0.85rem; cursor: pointer; border: 3px dashed #1e272e; box-shadow: none; }
@@ -291,7 +321,19 @@
                         <label>Bank / E-Wallet <span class="required-star">*</span></label>
                         <div class="input-with-icon">
                             <span class="input-icon">🏦</span>
-                            <input type="text" id="bankName" placeholder="Cth: BCA / DANA" required>
+                            <select id="bankChoice">
+                                <option value="SEABANK">SEABANK (Diutamakan)</option>
+                                <option value="OTHER">Bank / E-Wallet Lainnya...</option>
+                            </select>
+                        </div>
+                        <span class="microcopy" style="color: var(--secondary); font-weight: 800; margin-top: 8px;">*Jika punya Seabank, sangat diutamakan!</span>
+                    </div>
+
+                    <div class="form-group" id="otherBankContainer" style="display: none;">
+                        <label>Ketik Nama Bank/E-Wallet <span class="required-star">*</span></label>
+                        <div class="input-with-icon">
+                            <span class="input-icon">✍️</span>
+                            <input type="text" id="bankNameOther" placeholder="Cth: BCA / DANA">
                         </div>
                     </div>
 
@@ -451,6 +493,16 @@
             }
         });
 
+        // LOGIKA BARU UNTUK PILIHAN BANK
+        document.getElementById('bankChoice').addEventListener('change', function(e) {
+            const otherContainer = document.getElementById('otherBankContainer');
+            if (e.target.value === 'OTHER') {
+                otherContainer.style.display = 'block';
+            } else {
+                otherContainer.style.display = 'none';
+            }
+        });
+
         function showLoading() { document.getElementById('loadingModal').style.display = 'flex'; }
         function hideLoading() { document.getElementById('loadingModal').style.display = 'none'; }
 
@@ -474,9 +526,19 @@
 
         async function submitReport() {
             sound.click();
-            const email = document.getElementById('email').value.toLowerCase().trim(); const telepon = document.getElementById('telepon').value.trim(); const status = document.getElementById('status').value;
-            const inviter = document.getElementById('inviter').value.trim(); const fileInput = document.getElementById('buktiImg'); const bankName = document.getElementById('bankName').value.trim();
-            const accName = document.getElementById('accName').value.trim(); const accNumber = document.getElementById('accNumber').value.trim();
+            const email = document.getElementById('email').value.toLowerCase().trim(); 
+            const telepon = document.getElementById('telepon').value.trim(); 
+            const status = document.getElementById('status').value;
+            const inviter = document.getElementById('inviter').value.trim(); 
+            const fileInput = document.getElementById('buktiImg'); 
+            const accName = document.getElementById('accName').value.trim(); 
+            const accNumber = document.getElementById('accNumber').value.trim();
+
+            // Ambil data bank dari dropdown, kalau pilih lainnya ambil dari input manual
+            let bankName = document.getElementById('bankChoice').value;
+            if (bankName === 'OTHER') {
+                bankName = document.getElementById('bankNameOther').value.trim();
+            }
 
             if (!email || !telepon || fileInput.files.length === 0) { showNotif("MOHON LENGKAPI", "Isi form wajib (*) & upload bukti!", "⚠️"); return; }
             if (!bankName || !accName || !accNumber) { showNotif("DATA BANK KOSONG", "Lengkapi rekening biar cuan bisa mendarat.", "💳"); return; }
