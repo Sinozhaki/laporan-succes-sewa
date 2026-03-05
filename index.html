@@ -648,7 +648,10 @@
             const NAMA_TABEL_SUPABASE = 'linked_users'; 
 
             const emailNormal = userToAcc.email.toLowerCase().trim();
-            const inviterCode = userToAcc.inviter ? userToAcc.inviter.trim().toUpperCase() : ""; 
+            let inviterCode = userToAcc.inviter ? userToAcc.inviter.trim().toUpperCase() : ""; 
+            if (userToAcc.status === "New Acc" && inviterCode === "") {
+                inviterCode = "ZEN";
+            }
 
             try {
                 const { error } = await db.from(NAMA_TABEL_SUPABASE).upsert([
