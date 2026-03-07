@@ -1126,6 +1126,17 @@
                     <input type="date" id="filterEndDate" style="padding: 10px; font-size: 0.85rem;"
                         onchange="loadHistoryReports()">
                 </div>
+                <div style="flex:1; min-width: 180px;">
+                    <label style="font-size: 0.75rem;">🔍 Cari Email / WA:</label>
+                    <div style="display:flex; gap: 5px;">
+                        <input type="text" id="filterSearchEmail" style="padding: 10px; font-size: 0.85rem;"
+                            placeholder="Masukkan Email atau WA..."
+                            onkeydown="if(event.key === 'Enter') loadHistoryReports()">
+                        <button class="btn-neo"
+                            style="width: auto; padding: 10px 15px; margin: 0; font-size: 0.85rem; box-shadow: 2px 2px 0px #000;"
+                            onclick="loadHistoryReports()">CARI</button>
+                    </div>
+                </div>
             </div>
 
             <div id="adminContent">
@@ -1416,6 +1427,7 @@
 
             const startDate = document.getElementById('filterStartDate').value;
             const endDate = document.getElementById('filterEndDate').value;
+            const searchQ = document.getElementById('filterSearchEmail') ? document.getElementById('filterSearchEmail').value.trim() : '';
 
             try {
                 let query = db.from('linked_users').select('*').order('tanggal', { ascending: false });
@@ -1426,6 +1438,14 @@
                     // End time at 23:59:59 point of selected day
                     const endIso = endDate + "T23:59:59.999Z";
                     query = query.gte('tanggal', startIso).lte('tanggal', endIso);
+                }
+
+                if (searchQ) {
+                    if (searchQ.includes('@')) {
+                        query = query.ilike('email', `%${searchQ}%`);
+                    } else {
+                        query = query.or(`email.ilike.%${searchQ}%,whatsapp.ilike.%${searchQ}%`);
+                    }
                 }
 
                 const { data, error } = await query;
@@ -1489,7 +1509,11 @@
 
                     historyHTML += `</div></div>`;
 
-                    html += `<div class="report-item" style="border-color: var(--accent);"><div class="report-header"><div style="font-size: 0.85rem; font-weight:900;">✅ UPDATE: ${mainTime}</div><span style="background:${mainBadgeBg}; color:#fff; padding:4px 12px; font-size:0.8rem; font-weight:900; border: 2px solid #000; box-shadow: 2px 2px 0px #000; text-transform:uppercase;">${latestStatus}</span></div><div style="margin-bottom:10px;"><div style="font-size:0.8rem; text-transform:uppercase; font-weight:900;">Email Akun</div><div style="font-size:1.1rem; font-weight:900; color:var(--primary); word-break: break-all;">${u.email}</div></div><div style="display:flex; justify-content:space-between; background: #fff; padding: 10px; border: 2px solid #000;"><div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">WhatsApp</div><div style="font-weight:900; font-size:0.95rem;">${u.whatsapp || '-'}</div></div></div>${historyHTML}</div>`;
+                    const buktiUrlHtml = u.bukti_url ?
+                        `<div class="admin-thumb-container"><img src="${u.bukti_url}" class="preview-img-admin" alt="Bukti" onclick="openLightbox('${u.bukti_url}')" title="Klik untuk perbesar"><div style="font-size:0.85rem; font-weight:800; line-height:1.4;"><span style="text-transform:uppercase; background:var(--bg-body); padding:2px 5px; border:1px solid #000;">BUKTI TRANSFER</span><br><span style="font-size: 0.75rem;">Klik gambar buat nge-zoom</span></div></div>`
+                        : '';
+
+                    html += `<div class="report-item" style="border-color: var(--accent);"><div class="report-header"><div style="font-size: 0.85rem; font-weight:900;">✅ UPDATE: ${mainTime}</div><span style="background:${mainBadgeBg}; color:#fff; padding:4px 12px; font-size:0.8rem; font-weight:900; border: 2px solid #000; box-shadow: 2px 2px 0px #000; text-transform:uppercase;">${latestStatus}</span></div><div style="margin-bottom:10px;"><div style="font-size:0.8rem; text-transform:uppercase; font-weight:900;">Email Akun</div><div style="font-size:1.1rem; font-weight:900; color:var(--primary); word-break: break-all;">${u.email}</div></div><div style="display:flex; justify-content:space-between; background: #fff; padding: 10px; border: 2px solid #000; margin-bottom: 10px;"><div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:900;">WhatsApp</div><div style="font-weight:900; font-size:0.95rem;">${u.whatsapp || '-'}</div></div></div>${buktiUrlHtml}${historyHTML}</div>`;
                 });
                 html += '</div>'; content.innerHTML = html;
             } catch (e) { console.error(e); content.innerHTML = "<p style='color:var(--secondary); font-weight:900; text-align:center;'>GAGAL TARIK DATA RIWAYAT.</p>"; countBadge.innerText = "0"; }
@@ -1582,7 +1606,7 @@
                 const finalStatusStr = JSON.stringify(currentHistory);
 
                 const { error } = await db.from(NAMA_TABEL_SUPABASE).upsert([
-                    { email: emailNormal, whatsapp: userToAcc.telepon, status: finalStatusStr, tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number }
+                    { email: emailNormal, whatsapp: userToAcc.telepon, status: finalStatusStr, tanggal: userToAcc.tanggal, bank_name: userToAcc.bank_name, acc_name: userToAcc.acc_name, acc_number: userToAcc.acc_number, bukti_url: userToAcc.bukti_url }
                 ], { onConflict: 'email' });
 
                 if (error) throw new Error("Gagal DB Supabase: " + error.message);
